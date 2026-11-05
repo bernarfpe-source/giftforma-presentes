@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Presentes de Natal em 3D | GiftForma</title>
+<meta name="description" content="Presentes de Natal impressos em 3D: monte seu kit de 5, 7 ou 9 peças e personalize com nome e dedicatória. Papai Noel, rena, pinguim, árvore e mais. Enviamos para todo o Brasil.">
+<link rel="canonical" href="https://presentes.giftforma.com.br/">
+<meta property="og:type" content="website"><meta property="og:url" content="https://presentes.giftforma.com.br/">
+<meta property="og:title" content="Presentes de Natal em 3D | GiftForma">
+<meta property="og:description" content="Monte seu kit de Natal com 5, 7 ou 9 peças e personalize com nome e dedicatória.">
+<meta property="og:image" content="https://presentes.giftforma.com.br/assets/og-natal.jpg">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Manrope:wght@400;500;600;700&family=Caveat:wght@600;700&family=Playfair+Display:wght@800&display=swap">
+<style>
+:root{
+  /* cores da GiftForma (usadas fora do Natal) */
+  --bg:#F4F7F9;--bg-2:#FFFFFF;--bg-3:#E8EEF2;--line:#D6DEE5;--line-hover:#B9C5CF;
+  --fg:#0E1519;--muted:#5A6A77;
+  --brand:#1B8E92;--brand-fill:#2BB5B8;--brand-ink:#06262A;--footer:#0E474A;
+  --acc:var(--brand);--acc-ink:#06262A;
+  /* cores do Natal (só dentro de .natal) */
+  --red:#B3201F;--red-ink:#FFFFFF;--red-soft:#FBE4DF;
+  --green:#14532D;--green-2:#0E3D21;--gold:#E2B13C;--gold-ink:#3B2A05;
+  --teal:#1B8E92;--tint:#E6F4F5;
+  --warn:#92400E;--warn-bg:#FEF3C7;--ok:#166534;--ok-bg:#DCFCE7;
+  --font-display:'Montserrat',system-ui,sans-serif;--font-body:'Manrope',system-ui,sans-serif;--font-hand:'Caveat',cursive;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0B0F13;--bg-2:#131920;--bg-3:#1B232B;--line:#2B3640;--line-hover:#3A4651;
+  --fg:#F2F6F8;--muted:#A3AFB9;--brand:#33C9CD;--footer:#0B0F13;
+  --red:#F0605B;--red-ink:#2A0707;--red-soft:#3A1A18;
+  --green:#14532D;--green-2:#0A2A17;--gold:#F0C255;--gold-ink:#2E2004;
+  --teal:#33C9CD;--tint:#16282A;--warn:#FCD34D;--warn-bg:#3B2F0B;--ok:#86EFAC;--ok-bg:#12301C;color-scheme:dark}
+}
+/* tema de Natal: vale só onde a classe .natal aparece */
+.natal{--bg:#FBF6EE;--bg-2:#FFFFFF;--bg-3:#F1E8DA;--line:#E8DCCB;--line-hover:#CDBB9F;--fg:#1E1512;--muted:#6B5B50;--acc:var(--red);--acc-ink:var(--red-ink);color:var(--fg)}
+@media (prefers-color-scheme:dark){.natal{--bg:#0F1A14;--bg-2:#16241B;--bg-3:#1F3025;--line:#2C4435;--line-hover:#43624F;--fg:#F7F1E8;--muted:#B4C2B6}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+h1,h2,h3{font-family:var(--font-display);line-height:1.12;margin:0;text-wrap:balance;letter-spacing:-.01em}
+a{color:inherit}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));position:relative}
+.eyebrow{font-family:var(--font-display);font-weight:700;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);display:inline-flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:26px;height:2px;background:var(--acc)}
+.h2{font-size:clamp(1.6rem,3.4vw,2.35rem);font-weight:800;margin-top:10px}
+.lead{color:var(--muted);max-width:60ch;margin:12px 0 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--font-display);font-weight:800;font-size:.95rem;padding:14px 24px;border-radius:999px;text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .15s,filter .15s;background:var(--acc);color:var(--acc-ink)}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+.btn.gold{background:var(--gold);color:var(--gold-ink)}
+.btn.ghost{background:transparent;color:inherit;border-color:currentColor}
+.btn.zap{background:#1FB85B;color:#04210F}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--brand-fill);outline-offset:2px}
+
+.teste{background:var(--warn-bg);color:var(--warn);text-align:center;font-size:.85rem;font-weight:700;padding:8px 16px}
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);border-bottom:3px solid var(--brand-fill)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo img{height:32px;width:auto}
+.logo .l-dark{display:none}
+@media (prefers-color-scheme:dark){.logo .l-dark{display:block}.logo .l-light{display:none}}
+.logo .area{font-family:var(--font-hand);font-weight:700;font-size:1.55rem;color:var(--brand);line-height:1;padding-left:12px;border-left:2px solid var(--line-hover)}
+nav.menu{display:flex;gap:22px;align-items:center}
+nav.menu a:not(.btn){text-decoration:none;font-weight:600;font-size:.9rem;color:var(--muted)}
+nav.menu a:not(.btn):hover{color:var(--fg)}
+.top .btn{padding:10px 18px;font-size:.85rem}
+@media (max-width:760px){nav.menu a:not(.btn){display:none}.logo .area{font-size:1.25rem}}
+
+/* hero natalino */
+.hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(1200px 500px at 85% -10%,#1d7a45 0,transparent 60%),linear-gradient(160deg,var(--green) 0,var(--green-2) 100%);padding:54px 0 64px}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:22px;background:radial-gradient(circle at 12px 0,transparent 11px,var(--bg) 12px) 0 0/24px 22px repeat-x}
+.neve{position:absolute;inset:0;pointer-events:none;opacity:.55;background-image:radial-gradient(2px 2px at 20px 30px,#fff,transparent),radial-gradient(3px 3px at 90px 120px,#fff,transparent),radial-gradient(2px 2px at 160px 70px,#fff,transparent),radial-gradient(2.5px 2.5px at 230px 160px,#fff,transparent),radial-gradient(2px 2px at 300px 20px,#fff,transparent);background-size:320px 200px;animation:cai 14s linear infinite}
+.neve.b{opacity:.35;background-size:210px 160px;animation-duration:9s}
+@keyframes cai{to{background-position:60px 400px}}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero .eyebrow{color:var(--gold)}.hero .eyebrow::before{background:var(--gold)}
+.hero h1{font-size:clamp(2rem,5vw,3.3rem);font-weight:900;margin:14px 0 16px}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero .lead{color:rgba(255,255,255,.86)}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.cont{display:flex;gap:16px;align-items:center;margin-top:28px;flex-wrap:wrap}
+.cont .num{font-family:var(--font-display);font-weight:900;font-size:3.4rem;line-height:1;color:var(--gold);font-variant-numeric:tabular-nums}
+.cont .tx{font-size:.95rem;color:rgba(255,255,255,.9)}
+.cont .tx b{display:block;font-family:var(--font-display)}
+.cont .pedir{font-size:.82rem;color:rgba(255,255,255,.75);flex-basis:100%}
+.destaque{position:relative;border-radius:24px;overflow:hidden;border:3px solid var(--gold);aspect-ratio:1/1;background:var(--green-2);box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.destaque img{width:100%;height:100%;object-fit:cover}
+.destaque .selo{position:absolute;left:16px;top:16px;background:var(--red);color:#fff;font-family:var(--font-display);font-weight:800;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:999px}
+.destaque .leg{position:absolute;left:14px;right:14px;bottom:14px;background:color-mix(in srgb,var(--bg-2) 95%,transparent);color:var(--fg);border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center;justify-content:space-between}
+.destaque .leg b{font-family:var(--font-display);font-size:1rem;display:block}
+.destaque .leg span{color:var(--muted);font-size:.82rem}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr;gap:26px}.hero{padding-top:30px}.destaque{aspect-ratio:4/3}}
+
+/* vitrine */
+.vitrine{padding:50px 0 60px;background:var(--bg)}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0 6px}
+.chip{font-family:var(--font-display);font-weight:700;font-size:.86rem;padding:10px 18px;border-radius:999px;border:1px solid var(--line-hover);background:var(--bg-2);color:var(--fg);cursor:pointer}
+.chip[aria-pressed=true]{background:var(--green);border-color:var(--green);color:#fff}
+.chip span{opacity:.7;margin-left:6px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;margin-top:22px}
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:grid;grid-template-rows:auto 1fr;transition:border-color .15s,transform .15s,box-shadow .15s}
+.card:hover{border-color:var(--line-hover);transform:translateY(-2px)}
+.card.on{border-color:var(--red);box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 22%,transparent)}
+.card[data-add]{cursor:pointer}
+.card.on .ph::after{content:"✓";position:absolute;right:10px;top:10px;width:30px;height:30px;border-radius:50%;background:var(--red);color:var(--red-ink);display:grid;place-items:center;font-weight:900}
+.card .ph{position:relative}
+.slot.novo{animation:pop .4s ease}
+@keyframes pop{0%{transform:scale(.3)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+.card .ph{aspect-ratio:1/1;background:var(--bg-3);overflow:hidden}
+.card .ph img{width:100%;height:100%;object-fit:cover}
+.semfoto{width:100%;height:100%;display:grid;place-items:center;color:var(--muted);font-family:var(--font-hand);font-size:1.5rem;background:repeating-linear-gradient(45deg,var(--bg-3),var(--bg-3) 10px,var(--bg) 10px,var(--bg) 20px)}
+.card .tx{padding:14px 16px 16px;display:grid;gap:4px;align-content:start}
+.card .tg{font-family:var(--font-display);font-weight:700;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
+.card h3{font-size:1.02rem;font-weight:800}
+.card .med{font-size:.8rem;color:var(--muted)}
+.card p{margin:2px 0 0;color:var(--muted);font-size:.88rem}
+.add{margin-top:10px;justify-self:start;font-family:var(--font-display);font-weight:800;font-size:.82rem;padding:9px 16px;border-radius:999px;border:2px solid var(--red);background:transparent;color:var(--red);cursor:pointer}
+.add:hover{background:var(--red-soft)}
+.card.on .add{background:var(--red);color:var(--red-ink)}
+.vazio{margin-top:22px;padding:30px;border:2px dashed var(--line-hover);border-radius:16px;color:var(--muted);text-align:center}
+
+.faixa-kit{background:var(--red);color:#fff;padding:34px 0}
+.faixa-kit .wrap{display:flex;gap:22px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.faixa-kit h2{font-size:clamp(1.3rem,2.6vw,1.8rem);font-weight:800}
+.faixa-kit p{margin:6px 0 0;color:rgba(255,255,255,.88);max-width:56ch}
+
+.passos{padding:56px 0}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;margin-top:26px}
+.passo{border-top:2px solid var(--acc);padding-top:14px}
+.passo .n{font-family:var(--font-hand);font-weight:700;font-size:2.4rem;line-height:1;color:var(--acc)}
+.passo b{display:block;font-family:var(--font-display);margin:4px 0}
+.passo p{margin:0;color:var(--muted);font-size:.92rem}
+
+/* bastidores */
+.bast{padding:56px 0 100px;background:var(--bg-3);border-top:1px solid var(--line)}
+.bast .faixa{display:inline-block;background:var(--warn-bg);color:var(--warn);font-weight:800;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:5px 12px;margin-bottom:10px}
+.contag{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:22px 0}
+.contag div{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.contag b{display:block;font-family:var(--font-display);font-size:1.7rem;line-height:1;font-variant-numeric:tabular-nums}
+.contag span{font-size:.8rem;color:var(--muted);font-weight:600}
+.contag .c-p b{color:var(--brand)}.contag .c-b b{color:var(--fg)}
+.tab{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.tab .rolar{max-height:460px;overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th{position:sticky;top:0;background:var(--bg-2);text-align:left;font-family:var(--font-display);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--line);z-index:1}
+td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td .mini{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--bg-3);display:grid;place-items:center;font-size:.6rem;color:var(--muted);text-align:center}
+td select{font:inherit;font-size:.85rem;font-weight:600;padding:7px 10px;border-radius:10px;border:1px solid var(--line-hover);background:var(--bg);color:var(--fg);max-width:100%}
+td select:disabled{opacity:.55}
+.apare{display:inline-block;border-radius:999px;padding:3px 10px;font-size:.74rem;font-weight:800}
+.ap-p{background:var(--tint);color:var(--brand)}.ap-b{background:var(--fg);color:var(--bg)}.ap-2{background:var(--ok-bg);color:var(--ok)}.ap-f,.ap-d{background:var(--bg-3);color:var(--muted)}
+.trava{font-size:.75rem;color:var(--warn);font-weight:700;display:block;margin-top:2px}
+.regras{margin:22px 0 0;padding:0;list-style:none;display:grid;gap:8px;color:var(--muted);font-size:.9rem}
+.regras li::before{content:"→ ";color:var(--brand);font-weight:800}
+
+/* kit */
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:26px 0 6px}
+.tier{position:relative;text-align:left;font:inherit;color:inherit;background:var(--bg-2);border:2px solid var(--line);border-radius:18px;padding:18px 18px 16px;cursor:pointer;display:grid;gap:4px;transition:border-color .15s,transform .15s,background .15s}
+.tier:hover{transform:translateY(-2px);border-color:var(--line-hover)}
+.tier[aria-pressed=true]{border-color:var(--red);background:var(--red-soft)}
+.tier .n{font-family:var(--font-display);font-weight:900;font-size:2.4rem;line-height:1;color:var(--red)}
+.tier b{font-family:var(--font-display);font-size:1.02rem}
+.tier span{font-size:.84rem;color:var(--muted)}
+.tier .tag{position:absolute;right:12px;top:12px;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:var(--red);color:var(--red-ink);padding:3px 9px;border-radius:999px}
+.layout{display:grid;grid-template-columns:300px minmax(0,1fr) 270px;gap:28px;align-items:start}
+.kitpanel{position:sticky;top:92px;background:var(--bg-2);border:2px solid var(--red);border-radius:22px;padding:18px;display:grid;gap:10px;margin-top:22px}
+.kp-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.kp-top b{font-family:var(--font-display);font-size:1rem}
+.kp-top span{font-family:var(--font-display);font-weight:900;color:var(--red);font-variant-numeric:tabular-nums}
+.bandeja{background:linear-gradient(#fff,#EDE6DA);border:1px solid var(--line-hover);border-radius:50%/42%;padding:20px 16px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-content:center;min-height:150px;box-shadow:inset 0 -6px 0 rgba(0,0,0,.05),0 8px 18px rgba(0,0,0,.12)}
+.slot{width:48px;height:48px;border-radius:50%;border:2px dashed #CDBB9F;display:grid;place-items:center;color:#CDBB9F;font-weight:800;background:transparent;padding:0;overflow:hidden;cursor:pointer;font:inherit}
+.slot.cheio{border:2px solid var(--red);background:#fff}
+.slot.cheio img{width:100%;height:100%;object-fit:cover}
+.slot.cheio .sf{font-size:.5rem;color:#6B5B50;text-align:center;line-height:1.1}
+.barra{height:8px;border-radius:99px;background:var(--bg-3);overflow:hidden}
+.barra i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .3s}
+.kp-msg{margin:0;font-size:.85rem;color:var(--muted);min-height:2.6em}
+.kitpanel .btn:disabled{opacity:.45;cursor:not-allowed;transform:none;filter:none}
+
+dialog{border:0;border-radius:22px;padding:0;max-width:480px;width:calc(100% - 32px);background:var(--bg-2);color:var(--fg);box-shadow:0 30px 80px rgba(0,0,0,.4)}
+dialog::backdrop{background:rgba(10,6,4,.6)}
+dialog .in{padding:24px;display:grid;gap:14px}
+dialog h3{font-size:1.25rem}
+dialog .rs{color:var(--muted);font-size:.88rem;margin:0}
+dialog label{display:grid;gap:6px;font-weight:700;font-size:.85rem}
+dialog input,dialog textarea{font:inherit;font-weight:500;padding:12px 14px;border-radius:12px;border:1px solid var(--line-hover);background:var(--bg);color:var(--fg);width:100%}
+dialog .linha{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+dialog .acoes{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+dialog{max-height:92vh;overflow:auto}
+.peca .pfoto{aspect-ratio:16/10;border-radius:16px;overflow:hidden;background:var(--bg-3)}
+.peca .pfoto img{width:100%;height:100%;object-fit:cover}
+.peca .ptag{font-family:var(--font-display);font-weight:700;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
+.peca .pdesc{margin:0;color:var(--muted);font-size:.92rem}
+.preco-t{border:2px dashed var(--line-hover);border-radius:12px;padding:8px 14px;font-family:var(--font-display);font-weight:800;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.preco-t b{font-size:1.3rem;color:var(--red)}
+.preco-t small{font-family:var(--font-body);font-weight:600;color:var(--muted);font-size:.75rem}
+.acoesc{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.ver{margin-top:10px;background:none;border:0;color:var(--muted);font:inherit;font-weight:700;font-size:.8rem;text-decoration:underline;cursor:pointer;padding:6px 0}
+.ver:hover{color:var(--fg)}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--red-soft);border:1px solid var(--red);border-radius:999px;padding:5px 6px 5px 12px;font-size:.82rem;font-weight:700}
+.pill button{border:0;background:var(--red);color:var(--red-ink);width:22px;height:22px;border-radius:50%;cursor:pointer;font-weight:900;line-height:1}
+.aviso{font-size:.86rem;border-radius:12px;padding:9px 13px;background:var(--tint);display:none}
+.aviso.urg{display:block;background:var(--warn-bg);color:var(--warn);font-weight:700}
+.aviso.ok{display:block}
+footer{background:var(--footer);color:#fff;padding:30px 0;font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.musica{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:31;background:var(--red);color:#fff;border:2px solid var(--gold);border-radius:999px;padding:11px 18px;font-family:var(--font-display);font-weight:800;font-size:.85rem;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.3);max-width:min(300px,calc(100vw - 28px));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.musica[aria-pressed=true]{background:var(--green);animation:pulsa 1.8s ease-in-out infinite}
+@keyframes pulsa{50%{box-shadow:0 0 0 9px rgba(226,177,60,.3)}}
+@media (max-width:1000px){.musica{bottom:calc(84px + env(safe-area-inset-bottom,0px))}}
+/* ===== topo no estilo da arte enviada (cabeçalho transparente sobre o hero) ===== */
+.top{margin-bottom:-68px}
+.top:not(.solido){background:transparent;border-bottom-color:transparent;backdrop-filter:none}
+.top:not(.solido) .l-light{display:none}.top:not(.solido) .l-dark{display:block}
+.top:not(.solido) nav.menu a:not(.btn){color:#fff}
+.top:not(.solido) .logo .area{color:var(--gold);border-left-color:rgba(255,255,255,.4)}
+.hero{background:#0c3a24 url(assets/hero-natal-fundo.webp) right center/cover no-repeat;padding:0;min-height:clamp(600px,48vw,780px);display:flex;align-items:center}
+.hero::after{content:"";left:-6%;right:-6%;bottom:-1px;height:64px;background:var(--bg);border-radius:50% 50% 0 0/100% 100% 0 0}
+.hero .hero-in{display:block;width:100%;padding-top:104px;padding-bottom:110px}
+.hero-tx{max-width:min(660px,48vw)}
+.chip-hero{display:inline-flex;align-items:center;gap:10px;border:1.5px solid var(--gold);color:var(--gold);border-radius:999px;padding:8px 20px;font-family:var(--font-display);font-weight:700;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase}
+.hero h1{font-size:clamp(2.2rem,4.8vw,4.3rem);font-weight:900;line-height:1.04;margin:22px 0 18px;text-shadow:0 2px 14px rgba(0,0,0,.35)}
+.hero h1 em{display:block;color:var(--gold)}
+.hero .lead{font-size:clamp(1rem,1.5vw,1.28rem);max-width:34ch;color:rgba(255,255,255,.92);margin:0}
+.hero .cta{display:flex;gap:16px;flex-wrap:wrap;margin-top:30px}
+.hero .btn{padding:17px 30px;font-size:1.02rem}
+.hero .btn b{font-size:1.3rem;line-height:1}
+.btn.red{background:linear-gradient(#e5202e,#b10f1c);color:#fff;box-shadow:0 10px 26px rgba(0,0,0,.35)}
+.btn.outline{background:rgba(0,0,0,.18);color:#fff;border:2px solid rgba(255,255,255,.85)}
+.selos{display:flex;flex-wrap:wrap;gap:14px 0;list-style:none;padding:0;margin:30px 0 0;color:#fff;font-size:.92rem}
+.selos li{display:inline-flex;align-items:center;gap:10px}
+.selos li+li{border-left:1px solid rgba(255,255,255,.28);margin-left:22px;padding-left:22px}
+.selos .ic{width:28px;height:28px;color:var(--gold);flex:none}
+.hero .cont{display:grid;grid-template-columns:auto auto 1fr;gap:6px 18px;align-items:center;max-width:620px;margin-top:28px;padding:16px 24px;border:1px solid rgba(255,255,255,.24);background:rgba(6,36,22,.62);border-radius:16px;backdrop-filter:blur(3px)}
+.hero .cont .cal{width:34px;height:34px;color:var(--gold)}
+.hero .cont .num{font-size:2.6rem}
+.hero .cont .tx{font-size:.95rem}
+.hero .cont .rever{grid-column:1/-1;justify-self:start;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:7px 14px;text-decoration:none;font-size:.8rem;white-space:nowrap}
+.nota-nat{text-align:center;color:var(--muted);font-size:.85rem;margin:10px 0 0}
+/* desktop largo: texto e cena escalam juntos (como na arte), sem o texto invadir a cena */
+@media (min-width:1100px){
+  .hero{height:auto;min-height:41.6vw;background-size:cover;background-position:right bottom}
+  .hero .hero-in{padding-top:5.2vw;padding-bottom:6.4vw}
+  .hero-tx{max-width:42vw}
+  .chip-hero{font-size:clamp(10px,.78vw,13px);padding:.4vw 1.2vw}
+  .hero h1{font-size:3.7vw;line-height:1.02;margin:1vw 0 .7vw}
+  .hero .lead{font-size:max(15px,1.3vw);line-height:1.38}
+  .hero .cta{gap:1vw;margin-top:1.3vw}
+  .hero .btn{padding:.85vw 1.7vw;font-size:max(14px,1.05vw)}
+  .selos{margin-top:1.3vw;font-size:max(12px,.95vw)}
+  .selos .ic{width:1.6vw;height:1.6vw;min-width:22px;min-height:22px}
+  .hero .cont{margin-top:1.2vw;padding:.65vw 1.2vw;gap:.3vw 1.1vw;grid-template-columns:auto auto 1fr auto;max-width:40vw}
+  .hero .cont .cal{width:2.2vw;height:2.2vw;min-width:26px;min-height:26px}
+  .hero .cont .num{font-size:max(30px,2.5vw)}
+  .hero .cont .tx{font-size:max(12px,.9vw)}
+  .hero .cont .rever{grid-column:auto;font-size:max(11px,.72vw);padding:.35vw .8vw}
+  .hero::after{height:4.4vw}
+}
+.hero-cena{display:none}
+.orn{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:10px}
+.orn span{height:2px;width:clamp(50px,9vw,120px);background:var(--gold)}
+.vitrine .h2.serif{font-family:'Playfair Display',Georgia,serif;font-weight:800;color:#14532D;text-align:center;font-size:clamp(1.9rem,4vw,3rem);margin-top:0}
+.vitrine .wrap>.lead{margin-left:auto;margin-right:auto;text-align:center}
+@media (prefers-color-scheme:dark){.vitrine .h2.serif{color:var(--fg)}}
+@media (max-width:1099px){
+  .hero{background-image:none;background-color:#0c3a24;min-height:0;display:block}
+  .hero .hero-in{padding-top:92px;padding-bottom:84px}
+  .hero-tx{max-width:none}
+  .hero-cena{display:block;width:100%;margin-top:26px;border-radius:20px;box-shadow:0 18px 40px rgba(0,0,0,.4)}
+  .selos li+li{margin-left:14px;padding-left:14px}
+}
+/* ===== estúdio do kit: o destaque da página ===== */
+.estudio{display:grid;grid-template-columns:300px minmax(0,1fr) 270px;margin:30px 0 44px;background:var(--bg-2);border:2px solid var(--red);border-radius:26px;box-shadow:0 24px 60px rgba(120,30,20,.16);overflow:hidden}
+.est-col{padding:22px 24px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.est-col+.est-col{border-left:1px solid var(--line)}
+.est-passo{font-family:var(--font-display);font-weight:800;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.est-bandeja{background:linear-gradient(180deg,var(--bg-2),var(--bg))}
+.estudio .bandeja{min-height:230px;padding:30px 26px;gap:14px}
+.estudio .slot{width:76px;height:76px}
+.estudio .tiers{grid-template-columns:1fr;margin:6px 0 0;gap:10px}
+.estudio .tier{grid-template-columns:auto 1fr;align-items:center;column-gap:14px;padding:12px 16px}
+.estudio .tier .n{grid-row:1/4;font-size:2.1rem}
+.estudio .tier>b,.estudio .tier>span:not(.n){grid-column:2}
+.estudio .tier .tag{display:none}
+.est-pedido{justify-content:center;background:var(--red-soft)}
+.est-pedido .btn{padding:18px 20px;font-size:1.05rem}
+.est-txt{margin:0;color:var(--muted);font-size:.9rem}
+.estudio .nota-nat{text-align:left;margin:0;font-size:.8rem}
+.catalogo{margin-top:6px}
+.cat-h{font-size:1.35rem;font-weight:800;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.cat-h small{font-family:var(--font-body);font-weight:500;color:var(--muted);font-size:.88rem}
+.vitrine .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.vitrine .card p{display:none}
+.vitrine .card .tx{padding:12px 14px 14px}
+.vitrine .card h3{font-size:.9rem}
+.kitmini{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));transform:translate(-50%,170%);z-index:30;display:flex;align-items:center;gap:12px;background:var(--bg-2);color:var(--fg);border:2px solid var(--red);border-radius:999px;padding:8px 8px 8px 16px;box-shadow:0 16px 40px rgba(0,0,0,.35);transition:transform .25s;max-width:calc(100vw - 20px)}
+.kitmini.vis{transform:translate(-50%,0)}
+.mini-band{display:flex;gap:5px;min-width:0}
+.mini-band .slot{width:34px;height:34px;flex:none}
+.kitmini b{font-family:var(--font-display);color:var(--red);white-space:nowrap}
+.kitmini .btn{padding:11px 18px;font-size:.88rem;white-space:nowrap}
+@media (max-width:1000px){
+  .estudio{grid-template-columns:1fr}
+  .est-col+.est-col{border-left:0;border-top:1px solid var(--line)}
+  .estudio .slot{width:54px;height:54px}
+  .estudio .bandeja{min-height:0;padding:22px 16px;gap:10px}
+  .estudio .tiers{grid-template-columns:repeat(3,1fr)}
+  .estudio .tier{grid-template-columns:1fr;padding:12px 10px;text-align:center}
+  .estudio .tier .n{grid-row:auto}
+  .estudio .tier>b,.estudio .tier>span:not(.n){grid-column:auto}
+  .estudio .tier b{font-size:.8rem}
+  .estudio .tier span:not(.n):not(.tag):not(.tpreco){display:none}
+  .estudio .tier .tag{right:6px;top:6px}
+}
+/* ordem: 1 tamanho, 2 peças, 3 bandeja */
+.passo-kit{margin:26px 0 8px}
+.passo-kit .tiers{margin:10px 0 0}
+.passo-kit .nota-nat{text-align:left;margin:8px 0 0}
+.catalogo{margin-top:28px}
+.catalogo .cat-h{margin-top:6px}
+.estudio{margin-top:40px}
+@media (max-width:700px){
+  .passo-kit .tiers{grid-template-columns:repeat(3,1fr);gap:10px}
+  .passo-kit .tier{padding:12px 10px;text-align:center}
+  .passo-kit .tier b{font-size:.78rem}
+  .passo-kit .tier span:not(.n):not(.tag){display:none}
+  .passo-kit .tier .tag{right:6px;top:6px;font-size:.58rem;padding:2px 7px}
+  .passo-kit .tier .n{font-size:1.9rem}
+}
+.card .cpreco{font-family:var(--font-display);font-weight:900;color:var(--red);font-size:1.05rem;line-height:1.2}
+.tier .tpreco{font-family:var(--font-display);font-weight:900;color:var(--red);font-size:1.05rem}
+.valor{display:grid;gap:2px;margin:4px 0 2px}
+.valor .v-rot{font-size:.74rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.valor .v-num{font-family:var(--font-display);font-weight:900;font-size:2.1rem;line-height:1.1;color:var(--red);font-variant-numeric:tabular-nums}
+.valor .v-eco{font-size:.8rem;font-weight:700;color:var(--ok)}
+.valor .v-aviso{font-size:.88rem;color:var(--muted)}/* ===== vitrine no modelo enviado: peças à esquerda, painel "Seu kit, do seu jeito." à direita ===== */
+.vitrine{position:relative;overflow:hidden;padding:54px 0 72px}
+.gar{position:absolute;top:0;pointer-events:none;mix-blend-mode:darken;z-index:0;height:auto;-webkit-mask-image:linear-gradient(to right,#000 78%,transparent),linear-gradient(to bottom,#000 78%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,#000 78%,transparent),linear-gradient(to bottom,#000 78%,transparent);mask-composite:intersect}
+.gar-e{left:0;width:clamp(150px,17vw,270px)}
+.gar-d{right:0;width:clamp(170px,21vw,320px);-webkit-mask-image:linear-gradient(to left,#000 78%,transparent),linear-gradient(to bottom,#000 78%,transparent);mask-image:linear-gradient(to left,#000 78%,transparent),linear-gradient(to bottom,#000 78%,transparent)}
+@media (prefers-color-scheme:dark){.gar{display:none}}
+.vitrine .wrap{position:relative;z-index:1}
+.vit-topo{text-align:center;margin-bottom:26px}
+.vit-eyebrow{display:inline-flex;align-items:center;gap:14px;font-family:var(--font-display);font-weight:700;font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:#A8741A}
+.vit-eyebrow::before,.vit-eyebrow::after{content:"";width:clamp(30px,6vw,80px);height:1.5px;background:var(--gold)}
+.vit-topo .h2.serif{margin:8px 0 6px}
+.vit-topo .lead{margin:0 auto;text-align:center;font-size:1.08rem;max-width:none}
+.vit-corpo{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:26px;align-items:start}
+.vit-pecas .chips{margin:0 0 16px}
+.vitrine .chip[aria-pressed=true]{background:var(--green);border-color:var(--green);color:#fff}
+.vitrine .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:0}
+.vitrine .card{border-radius:16px;background:var(--bg-2)}
+.vitrine .card .tx{display:grid;grid-template-columns:1fr auto;gap:4px 8px;padding:12px 14px 12px;align-items:center;align-content:start}
+.vitrine .card h3{grid-column:1/-1;font-family:'Playfair Display',Georgia,serif;font-size:1.05rem;font-weight:800}
+.vitrine .card .cpreco{font-size:1.35rem}
+.vitrine .card .add{margin:0;background:var(--green);color:#fff;border:0;padding:9px 14px;font-size:.8rem;justify-self:end}
+.vitrine .card .add:hover{background:var(--green-2)}
+.vitrine .card.on .add{background:var(--red);color:var(--red-ink)}
+.vitrine .card .ver{grid-column:2;justify-self:center;margin:0;font-size:.74rem;padding:2px 0}
+.vitrine .grid{align-items:stretch}
+.vitrine .card{height:100%}
+.vitrine .card .add{min-height:36px;line-height:1.2;display:inline-flex;align-items:center;justify-content:center}
+.vitrine .card .cpreco{align-self:center}
+.ilustr{margin:12px 0 0;text-align:right;font-size:.78rem;color:var(--muted)}
+.kit-lateral{position:sticky;top:84px;background:var(--bg-2);border:2px solid var(--gold);border-radius:22px;overflow:hidden;box-shadow:0 20px 50px rgba(90,60,20,.18)}
+.kl-topo{background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;gap:12px;padding:16px 18px;font-family:'Playfair Display',Georgia,serif;font-weight:800;font-size:1.5rem}
+.kl-topo .spark{color:var(--gold);font-size:.9rem}
+.kl-corpo{padding:18px 22px 22px;display:grid;gap:12px}
+.kl-h{font-family:'Playfair Display',Georgia,serif;font-size:1.12rem;font-weight:800;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin:4px 0 0}
+.kl-h small{font-family:var(--font-body);font-weight:500;font-size:.85rem;color:var(--muted)}
+.kl-h em{font-style:normal;margin-left:auto;font-family:var(--font-display);font-weight:800;font-size:.78rem;color:var(--red)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0}
+.seg-b{font-family:var(--font-display);font-weight:800;font-size:.95rem;padding:12px 8px;border-radius:12px;border:2px solid var(--line);background:var(--bg-2);color:var(--fg);cursor:pointer}
+.seg-b:hover{border-color:var(--line-hover)}
+.seg-b[aria-pressed=true]{background:var(--green);border-color:var(--green);color:#fff;box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 25%,transparent)}
+.kit-lateral .bandeja{min-height:190px;padding:24px 20px;gap:12px;background:linear-gradient(#F4EAD8,#E5D5B9);border:1px solid #D8C6A6}
+.kit-lateral .slot{width:58px;height:58px;border:2px dashed #BFA97F;color:#BFA97F;background:rgba(255,255,255,.3)}
+.kit-lateral .slot.cheio{border:2px solid var(--red);background:#fff}
+.kl-in{display:flex;align-items:center;gap:10px;border:1px solid var(--line-hover);border-radius:12px;padding:11px 14px;background:var(--bg)}
+.kl-in svg{color:var(--muted);flex:none}
+.kl-in input{border:0;background:transparent;font:inherit;width:100%;outline:none;padding:0;color:var(--fg)}
+.kl-total{display:grid;gap:0;border-top:1px solid var(--line);padding-top:12px}
+.kl-total b{font-family:var(--font-display);font-size:1.02rem}
+.kl-total strong{font-family:var(--font-display);font-weight:900;font-size:2.1rem;line-height:1.15;color:var(--red);font-variant-numeric:tabular-nums}
+.kl-total small{font-size:.8rem;font-weight:700;color:var(--ok);min-height:1.2em}
+.btn.full{width:100%;padding:16px 20px;font-size:1.05rem}
+.btn.off{opacity:.45;pointer-events:none;box-shadow:none}
+.kl-nota{margin:0;text-align:center;font-size:.8rem;color:var(--muted)}
+.kit-lateral .nota-nat{text-align:center;margin:0;font-size:.78rem}
+@media (max-width:1000px){
+  .vit-corpo{grid-template-columns:1fr}
+  .kit-lateral{position:static}
+  .vitrine .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:480px){
+  .vitrine .card .tx{grid-template-columns:1fr}
+  .vitrine .card .add,.vitrine .card .ver{grid-column:1;justify-self:start}
+  .kl-topo{font-size:1.25rem}
+}
+/* prato com os bonecos em escala */
+.kit-lateral .bandeja.prato{display:block;position:relative;aspect-ratio:16/10;min-height:0;padding:0;border:0;background:none;container-type:inline-size;overflow:visible}
+.bandeja.prato::before{content:"";position:absolute;left:1%;right:1%;top:32%;bottom:3%;border-radius:50%;background:radial-gradient(ellipse at 50% 30%,#F8F0DF,#E9DABD 68%,#D8C4A0);box-shadow:0 16px 24px rgba(80,50,10,.3),inset 0 0 0 3px #EADCC0,inset 0 -8px 0 rgba(255,255,255,.35)}
+.bandeja.prato.branca::before{background:radial-gradient(ellipse at 50% 30%,#fff,#F3F3F1 68%,#DEDCD6);box-shadow:0 16px 24px rgba(0,0,0,.25),inset 0 0 0 4px #fff,inset 0 0 0 8px #E9E7E2,inset 0 -8px 0 rgba(0,0,0,.05)}
+.prato .fig,.prato .vaga{position:absolute;transform:translate(-50%,-100%);border:0;background:none;padding:0;cursor:pointer}
+.prato .fig img{display:block;height:calc(27cqw*var(--h));width:auto;filter:drop-shadow(0 6px 4px rgba(60,35,10,.35));transition:filter .15s}
+.prato .fig:hover img{filter:drop-shadow(0 6px 4px rgba(60,35,10,.35)) brightness(1.06)}
+.prato .fig.novo img{animation:pop .4s ease;transform-origin:50% 100%}
+.prato .vaga{width:12cqw;height:5cqw;border:2px dashed #BFA97F;border-radius:50%;transform:translate(-50%,-50%);background:rgba(255,255,255,.28)}
+.prato .fig.redondo img{height:calc(15cqw*var(--h));width:calc(15cqw*var(--h));min-width:46px;min-height:46px;border-radius:50%;object-fit:cover;border:2px solid #fff;filter:drop-shadow(0 4px 4px rgba(60,35,10,.35))}
+.carregando{grid-column:1/-1;color:var(--muted);padding:30px;text-align:center}
+.rever{flex-basis:100%;background:none;border:0;color:var(--gold);font:inherit;font-weight:700;font-size:.85rem;cursor:pointer;text-align:left;padding:2px 0;text-decoration:underline}
+.rever:hover{filter:brightness(1.15)}
+/* rena do Papai Noel atravessando a página */
+body{overflow-x:clip}
+.rena-voo{position:fixed;top:34px;left:0;z-index:25;width:clamp(150px,18vw,270px);pointer-events:none;transform:translateX(-105%);opacity:0}
+.rena-voo.voando{animation:cruza 24s linear forwards}
+.rena-voo img{display:block;width:100%;height:auto;filter:drop-shadow(0 14px 10px rgba(0,0,0,.3))}
+.rena-voo .bob{position:relative}
+.faisca{position:absolute;color:#F0C255;font-size:1.3rem;line-height:1;text-shadow:0 0 8px #F0C255;animation:brilha .8s ease-in-out infinite alternate}
+.faisca.f1{left:-3%;top:38%;font-size:1.6rem}.faisca.f2{left:-9%;top:58%;animation-delay:-.25s}.faisca.f3{left:-15%;top:30%;font-size:1rem;animation-delay:-.5s}.faisca.f4{left:-21%;top:64%;font-size:.9rem;animation-delay:-.15s}.faisca.f5{left:-28%;top:44%;font-size:1.1rem;animation-delay:-.4s}
+.rena-voo .bob{transform-origin:50% 60%}
+.rena-voo.voando .bob{animation:bob 2.6s ease-in-out infinite}
+.rena-voo .leg{transform-box:fill-box;transform-origin:50% 0}
+.rena-voo.voando .leg.a{animation:trote .42s ease-in-out infinite alternate}
+.rena-voo.voando .leg.b{animation:trote .42s ease-in-out infinite alternate-reverse}
+.rena-voo .nariz{filter:drop-shadow(0 0 5px #ff3b3b)}
+.rena-voo .brilho{animation:brilha .9s ease-in-out infinite alternate}
+@keyframes cruza{0%{transform:translateX(-105%);opacity:1}100%{transform:translateX(calc(100vw + 5%));opacity:1}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(1deg)}50%{transform:translateY(-10px) rotate(-1.2deg)}}
+@keyframes trote{from{transform:rotate(-26deg)}to{transform:rotate(26deg)}}
+@keyframes brilha{from{opacity:.25}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.neve{animation:none}.rena-voo,.rever{display:none}}
+</style>
+</head>
+<body>
+
+<header class="top" id="topo">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="GiftForma Natal em 3D">
+      <img class="l-light" src="assets/logo.png" alt="GiftForma"><img class="l-dark" src="assets/logo-dark.png" alt="">
+      <span class="area">Natal em 3D</span>
+    </a>
+    <nav class="menu" aria-label="Principal">
+      <a href="#vitrine">Kits de Natal</a>
+      <a href="#como">Como pedir</a>
+      <a href="https://giftforma.com.br" target="_blank" rel="noopener">Brindes para empresas ↗</a>
+      <a class="btn zap" href="https://wa.me/5561991529547" target="_blank" rel="noopener">WhatsApp</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero natal">
+  <div class="neve"></div><div class="neve b"></div>
+  <div class="wrap hero-in">
+    <div class="hero-tx">
+      <span class="chip-hero"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l5 7h-3l4 6h-4l3 5H7l3-5H6l4-6H7z"/></svg> Natal 2026 · Presentes em 3D</span>
+      <h1>A magia do Natal, <em>feita para você.</em></h1>
+      <p class="lead">Monte seu kit com 5, 7 ou 9 peças e personalize com nome e dedicatória.</p>
+      <div class="cta">
+        <a class="btn red" href="#vitrine"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4"/><path d="M12 8v13M5 12v9h14v-9M7.5 8a2.5 2.5 0 010-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 010 5"/></svg> Montar meu kit <b>›</b></a>
+        <a class="btn outline" href="#como">Como pedir <b>›</b></a>
+      </div>
+      <ul class="selos"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 12l9-5M12 12L3 7M12 12v10"/></svg> Feito em 3D</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21l3-1 14-14-2-2L4 18z"/><path d="M14 6l4 4"/></svg> Personalizado</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21l1.6-4.8A9 9 0 1112 21a9 9 0 01-4.2-1z"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8a5 5 0 01-2.3-2.3l.8-1-1-2z"/></svg> Peça pelo WhatsApp</li></ul>
+      <div class="cont" id="nat">
+        <svg class="ic cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span class="num" id="natDias">--</span>
+        <span class="tx"><b>dias para o Natal</b>Encomende com antecedência para personalizar.</span>
+        <button class="rever" id="rever" type="button" title="Ver o Papai Noel passar de novo">▶ Papai Noel</button>
+      </div>
+    </div>
+    <img class="hero-cena" src="assets/hero-natal-cena.webp" alt="Papai Noel no trenó com renas, árvore de Natal, boneco de neve e presentes">
+    <div id="destaque" hidden></div>
+  </div>
+</section>
+
+<section class="vitrine natal" id="vitrine" aria-labelledby="t-v">
+  <img class="gar gar-e" src="assets/gar-esq.webp" alt="" aria-hidden="true">
+  <img class="gar gar-d" src="assets/gar-dir.webp" alt="" aria-hidden="true">
+  <div class="wrap">
+    <div class="vit-topo">
+      <span class="vit-eyebrow"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4"/><path d="M12 8v13M5 12v9h14v-9M7.5 8a2.5 2.5 0 010-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 010 5"/></svg> Monte seu kit de Natal</span>
+      <h2 class="h2 serif" id="t-v">Escolha as peças que vão encantar.</h2>
+      <p class="lead">Selecione seus favoritos e acompanhe a montagem do seu kit.</p>
+    </div>
+    <div class="vit-corpo">
+      <div class="vit-pecas">
+        <div class="chips" id="chips" role="group" aria-label="Filtrar por tipo"></div>
+        <div class="grid" id="grid"></div>
+        <div class="vazio" id="vazio" hidden>Os presentes de Natal estão chegando. Fale com a gente pelo WhatsApp que avisamos assim que estiverem prontos.</div>
+        <p class="ilustr">Imagens ilustrativas das peças.</p>
+      </div>
+      <aside class="kit-lateral" id="kitpanel" aria-label="Montagem do kit de Natal">
+        <div class="kl-topo"><span class="spark" aria-hidden="true">✦</span><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E2B13C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4"/><path d="M12 8v13M5 12v9h14v-9M7.5 8a2.5 2.5 0 010-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 010 5"/></svg><span>Seu kit, do seu jeito.</span><span class="spark" aria-hidden="true">✦</span></div>
+        <div class="kl-corpo">
+          <h3 class="kl-h"><span>1.</span> Escolha o tamanho</h3>
+          <div class="seg" id="tiers" role="group" aria-label="Tamanho do kit"></div>
+          <h3 class="kl-h"><span>2.</span> Sua bandeja <em id="kpCont">0 de 5 peças selecionadas</em></h3>
+          <div class="bandeja" id="bandeja"></div>
+          <div class="barra"><i id="barra"></i></div>
+          <p class="kp-msg" id="kpMsg"></p>
+          <h3 class="kl-h"><span>3.</span> Nome ou dedicatória <small>(opcional)</small></h3>
+          <label class="kl-in"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4"/><path d="M12 8v13M5 12v9h14v-9M7.5 8a2.5 2.5 0 010-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 010 5"/></svg><input id="kNome" type="text" maxlength="60" placeholder="Um toque especial para presentear" aria-label="Nome ou dedicatória (opcional)"></label>
+          <div class="kl-total"><b id="kpTit">Kit com 5 peças</b><strong id="kpTotal">R$ 110</strong><small id="kpEco"></small></div>
+          <a class="btn red full off" id="kpPedir" href="#" target="_blank" rel="noopener" aria-disabled="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21l1.6-4.8A9 9 0 1112 21a9 9 0 01-4.2-1z"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8a5 5 0 01-2.3-2.3l.8-1-1-2z"/></svg> Finalizar pelo WhatsApp <b>›</b></a>
+          <p class="kl-nota">🔒 Confira os detalhes do pedido pelo WhatsApp.</p>
+          <p class="nota-nat" id="natPedir"></p>
+        </div>
+      </aside>
+    </div>
+    <div class="kitmini" id="kitmini" aria-live="polite"><div class="mini-band" id="miniBand"></div><b id="miniCont">0 de 5</b><button class="btn" id="miniPedir" type="button">Pedir meu kit</button></div>
+  </div>
+</section>
+
+<section class="faixa-kit natal" aria-label="Kit de Natal">
+  <div class="wrap">
+    <div><h2>Clique, monte, presenteie</h2><p>Cada peça que você toca vai para a bandeja. Papai Noel, rena, pinguim, árvore e mais, tudo em um pedido só, com uma proposta e um cartão com a sua mensagem.</p></div>
+    <a class="btn gold" href="#vitrine">Começar o meu kit</a>
+  </div>
+</section>
+
+<section class="passos" id="como" aria-labelledby="t-c">
+  <div class="wrap">
+    <span class="eyebrow">Como pedir</span>
+    <h2 class="h2" id="t-c">Três passos até o presente embaixo da árvore</h2>
+    <div class="grid3">
+      <div class="passo"><span class="n">1.</span><b>Monte o kit</b><p>Escolha as peças e diga o nome, a cor e a dedicatória que vão no cartão.</p></div>
+      <div class="passo"><span class="n">2.</span><b>Aprove a proposta</b><p>Respondemos pelo WhatsApp com valor, prazo e a arte para você conferir.</p></div>
+      <div class="passo"><span class="n">3.</span><b>Receba a tempo</b><p>Produzimos, conferimos peça por peça e enviamos para qualquer lugar do Brasil.</p></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>GiftForma · Natal em impressão 3D · <a href="https://giftforma.com.br">Brindes para empresas</a></span>
+    <span>WhatsApp <a href="https://wa.me/5561991529547">(61) 99152-9547</a> · <a href="mailto:contato@giftforma.com.br">contato@giftforma.com.br</a></span>
+  </div>
+</footer>
+
+<button class="musica" id="musica" type="button" aria-pressed="false" aria-label="Ligar música de Natal">♪ Música de Natal</button>
+
+<!-- rena do Papai Noel puxando o trenó: atravessa a tela e repete de tempos em tempos -->
+<div class="rena-voo" id="renaVoo" aria-hidden="true"><div class="bob"><span class="faisca f1">✦</span><span class="faisca f2">✦</span><span class="faisca f3">✦</span><span class="faisca f4">✦</span><span class="faisca f5">✦</span><img src="assets/papai-noel-treno.webp" alt=""></div></div>
+
+<dialog id="dlgPeca" class="natal" aria-labelledby="pTit">
+  <form method="dialog" class="in peca">
+    <div class="pfoto" id="pFoto"></div>
+    <span class="ptag" id="pTag"></span>
+    <h3 id="pTit"></h3>
+    <p class="rs" id="pMed"></p>
+    <p class="pdesc" id="pDesc"></p>
+    <div class="preco-t">R$ <b id="pPreco">--,--</b> <small>peça avulsa</small></div>
+    <label>Nome ou dedicatória (opcional)<input id="pNome" type="text" maxlength="60" placeholder="Ex.: Para a Helena"></label>
+    <div class="linha">
+      <label>Quantidade<input id="pQtd" type="number" min="1" value="1" inputmode="numeric"></label>
+      <label>Cor preferida (opcional)<input id="pCor" type="text" maxlength="40" placeholder="Ex.: vermelho"></label>
+    </div>
+    <div class="acoes">
+      <button class="btn ghost" value="cancel" type="submit">Fechar</button>
+      <button class="btn" type="button" id="pKit">+ Ao meu kit</button>
+      <a class="btn zap" id="pZap" href="#" target="_blank" rel="noopener">Pedir só esta peça</a>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlg" class="natal" aria-labelledby="dTit">
+  <form method="dialog" class="in" id="dForm">
+    <h3 id="dTit">Meu kit de Natal</h3>
+    <div class="pills" id="dPills" aria-live="polite"></div>
+    <label>Nome ou dedicatória no cartão (opcional)<input id="dNome" type="text" maxlength="60" placeholder="Ex.: Para a família Souza, com carinho"></label>
+    <div class="linha">
+      <label>Quantos kits<input id="dQtd" type="number" min="1" value="1" inputmode="numeric"></label>
+      <label>Para qual data<input id="dData" type="date"></label>
+    </div>
+    <label>Cor preferida (opcional)<input id="dCor" type="text" maxlength="40" placeholder="Ex.: vermelho e verde"></label>
+    <div class="aviso" id="dAviso" role="status"></div>
+    <div class="acoes">
+      <button class="btn ghost" value="cancel" type="submit">Voltar</button>
+      <a class="btn zap" id="dZap" href="#" target="_blank" rel="noopener">Pedir pelo WhatsApp</a>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function(){
+  var ZAP='5561991529547';
+
+  var API_PADRAO='https://giftforma-api.onrender.com';
+  var API=(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&new URLSearchParams(location.search).get('api'))||API_PADRAO;
+  var IMG={}, IMGG={}, P=[];
+  var GRUPOS={personagens:'Personagens',decoracao:'Decoração',base:'Bandeja',outros:'Mais presentes'};
+  var GRUPO_POR_PECA={'papai-noel':'personagens','boneco-de-neve':'personagens','rena':'personagens','pinguim':'personagens','boneco-de-gengibre':'personagens','urso-polar':'personagens','arvore-de-natal':'decoracao','placa-feliz-natal':'decoracao','bandeja':'base'};
+  var DESTAQUE='';
+  var $=function(id){return document.getElementById(id);};
+  var pad=function(n){return (n<10?'0':'')+n;};
+  var fmt=function(d){return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();};
+  var brl=function(v){v=Number(v);return Number.isInteger(v)?String(v):v.toFixed(2).replace('.',',');};
+  var slugar=function(t){return String(t||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');};
+  var grupoAtivo='todos', kit={};
+  var noPresentes=function(p){return !!p;};
+  var porSlug=function(s){return P.filter(function(p){return p.slug===s;})[0];};
+
+  function cardHTML(p){
+    var foto=IMG[p.slug]?'<img loading="lazy" src="'+IMG[p.slug]+'" alt="'+p.titulo+'">':'<div class="semfoto">Foto em breve</div>';
+    var on=!!kit[p.slug];
+    return '<article class="card'+(on?' on':'')+'" data-add="'+p.slug+'"><div class="ph">'+foto+'</div><div class="tx"><h3>'+p.titulo+'</h3>'+(p.preco?'<span class="cpreco">R$ '+brl(p.preco)+'</span>':'<span></span>')+'<button class="add" type="button" data-add="'+p.slug+'">'+(on?'✓ No kit':'+ Adicionar')+'</button><button class="ver" type="button" data-ver="'+p.slug+'">Ver peça</button></div></article>';
+  }
+  function render(){
+    var vis=P.filter(noPresentes);
+    var dest=vis.filter(function(p){return p.slug===DESTAQUE&&IMG[p.slug];})[0];
+    var d=$('destaque');
+    if(dest){ var on=!!kit[dest.slug]; d.hidden=false; d.innerHTML='<img src="'+IMG[dest.slug]+'" alt="'+dest.titulo+'"><span class="selo">Destaque do Natal</span><div class="leg"><div><b>'+dest.titulo+'</b><span>'+(dest.medidas||'')+'</span><button class="ver" type="button" data-ver="'+dest.slug+'" style="display:block;margin:2px 0 0">Ver peça</button></div><button class="btn" type="button" data-add="'+dest.slug+'" style="padding:10px 18px;font-size:.85rem">'+(on?'✓ No meu kit':'+ Ao meu kit')+'</button></div>'; }
+    else { d.hidden=true; }
+    var lista=vis.filter(function(p){return !(dest&&p.slug===dest.slug);});
+    var cont={}; lista.forEach(function(p){cont[p.grupo]=(cont[p.grupo]||0)+1;});
+    var ks=['todos'].concat(Object.keys(GRUPOS).filter(function(k){return cont[k];}));
+    if(ks.indexOf(grupoAtivo)<0) grupoAtivo='todos';
+    var ch=$('chips'); ch.innerHTML='';
+    ks.forEach(function(k){
+      var b=document.createElement('button'); b.type='button'; b.className='chip'; b.setAttribute('aria-pressed',k===grupoAtivo?'true':'false');
+      b.textContent=(k==='todos'?'Todos':GRUPOS[k])+' ('+(k==='todos'?lista.length:cont[k])+')';
+      b.onclick=function(){grupoAtivo=k;render();}; ch.appendChild(b);
+    });
+    $('grid').innerHTML=lista.filter(function(p){return grupoAtivo==='todos'||p.grupo===grupoAtivo;}).map(cardHTML).join('');
+    $('vazio').hidden=lista.length>0||!!dest;
+    // limpa do kit o que saiu da vitrine
+    Object.keys(kit).forEach(function(s){ if(!noPresentes(porSlug(s))) delete kit[s]; });
+    ajustaAlvo(); renderTiers(); renderPanel();
+  }
+
+  // ---------- kit: o cliente vai clicando e a bandeja vai enchendo ----------
+  var TIERS=[];
+  var alvo=5, ultimo=null;
+  function nKit(){return Object.keys(kit).length;}
+  function ajustaAlvo(){ var n=nKit(); if(!TIERS.length){alvo=Math.max(5,n);return;} for(var i=0;i<TIERS.length;i++){ if(TIERS[i].n>=alvo&&TIERS[i].n>=n){alvo=TIERS[i].n;return;} } alvo=TIERS[TIERS.length-1].n; }
+  function tierTexto(n){
+    var t=0; TIERS.forEach(function(x){ if(x.n<=n) t=x.n; });
+    if(!t) return n+(n===1?' peça avulsa':' peças avulsas');
+    return n===t ? 'Kit com '+t+' peças' : 'Kit com '+t+' peças + '+(n-t)+(n-t===1?' avulsa':' avulsas');
+  }
+  function valorKit(){
+    var slugs=Object.keys(kit), n=slugs.length, soma=0, t=null, extras=0;
+    slugs.forEach(function(s){ soma+=porSlug(s).preco||0; });
+    TIERS.forEach(function(x){ if(x.n<=n) t=x; });
+    if(!t) return {total:soma,soma:soma,eco:0};
+    slugs.slice(t.n).forEach(function(s){ extras+=porSlug(s).preco||0; });
+    var total=t.preco+extras; return {total:total,soma:soma,eco:Math.max(0,soma-total)};
+  }
+  // prato com os bonecos: cada peça em pé sobre a bandeja, em escala proporcional (altura real medida no encarte)
+  var ESC={"papai-noel": [1.0, 0.666], "boneco-de-neve": [0.975, 0.711], "rena": [0.868, 1.041], "pinguim": [0.995, 0.724], "boneco-de-gengibre": [0.836, 0.795], "urso-polar": [0.859, 0.845], "arvore-de-natal": [0.881, 0.874], "placa-feliz-natal": [0.852, 1.234]};
+  var LAY={4:[[29,52],[71,52],[27,78],[73,78]],5:[[28,52],[72,52],[16,77],[50,81],[84,77]],6:[[22,52],[50,49],[78,52],[20,78],[50,82],[80,78]],7:[[24,52],[50,49],[76,52],[14,77],[38,81],[62,81],[86,77]],8:[[17,50],[39,47],[61,47],[83,50],[18,78],[39,82],[61,82],[82,78]],9:[[17,50],[39,47],[61,47],[83,50],[10,77],[30,81],[50,83],[70,81],[90,77]]};
+  var ESCALA={4:1.05,5:1,6:.93,7:.86,8:.8,9:.74};
+  function pratoHTML(slugs){
+    var tem=slugs.indexOf('bandeja')>=0, figs=slugs.filter(function(s){return s!=='bandeja';});
+    var k=Math.max(4,Math.min(9,Math.max(alvo,slugs.length)-(tem?1:0))), pos=LAY[k], sc=ESCALA[k], h='';
+    pos.forEach(function(p,i){
+      var x=p[0], y=p[1], dep=(y<60?.94:1);
+      if(i<figs.length){
+        var sl=figs[i], e=ESC[sl]||[.9,.8], tt=porSlug(sl).titulo;
+        h+='<button type="button" class="fig'+(sl===ultimo?' novo':'')+(IMG[sl+'_r']?'':' redondo')+'" data-rem="'+sl+'" title="Tirar '+tt+'" aria-label="Tirar '+tt+' do kit" style="left:'+x+'%;top:'+y+'%;z-index:'+Math.round(y)+';--h:'+(e[0]*sc*dep).toFixed(3)+'"><img src="'+(IMG[sl+'_r']||IMG[sl])+'" alt=""></button>';
+      } else h+='<button type="button" class="vaga" data-vazio="1" aria-label="Escolher mais uma peça" style="left:'+x+'%;top:'+y+'%"></button>';
+    });
+    return h;
+  }
+  function renderTiers(){
+    $('tiers').hidden=!TIERS.length; $('tiers').previousElementSibling.hidden=!TIERS.length;
+    $('tiers').innerHTML=TIERS.map(function(t){
+      return '<button type="button" class="seg-b" data-tier="'+t.n+'" aria-pressed="'+(t.n===alvo)+'">'+t.n+' peças</button>';
+    }).join('');
+  }
+  function zapKit(){
+    var itens=Object.keys(kit).map(function(s){return porSlug(s).titulo;});
+    var L=['Olá, GiftForma! Quero montar um kit de Natal: '+tierTexto(itens.length)+'.','Peças: '+itens.join(', ')+'.','Valor do kit: R$ '+brl(valorKit().total)+'.'];
+    var nome=$('kNome').value.trim(); if(nome) L.push('Nome/dedicatória no cartão: '+nome);
+    $('kpPedir').href='https://wa.me/'+ZAP+'?text='+encodeURIComponent(L.join('\n'));
+  }
+  function renderPanel(){
+    var n=nKit(), slugs=Object.keys(kit);
+    $('bandeja').classList.add('prato'); $('bandeja').classList.toggle('branca',slugs.indexOf('bandeja')>=0); $('bandeja').innerHTML=pratoHTML(slugs);
+    $('kpTit').textContent=TIERS.length?'Kit com '+alvo+' peças':'Seus presentes'; $('kpCont').textContent=TIERS.length?n+' de '+alvo+' peças selecionadas':n+(n===1?' peça selecionada':' peças selecionadas');
+    $('barra').style.width=Math.min(100,Math.round(n/alvo*100))+'%';
+    var falta=alvo-n, prox=TIERS.filter(function(t){return t.n>alvo;})[0], tA=TIERS.filter(function(t){return t.n===alvo;})[0], vk=valorKit();
+    $('kpMsg').textContent=n===0?'Adicione suas peças favoritas e veja seu kit ganhando forma.':falta>0?'Faltam '+falta+(falta===1?' peça':' peças')+' para completar o kit.':'Kit completo! Dá para pedir agora'+(prox?' ou acrescentar mais peças e virar o Kit com '+prox.n+'.':'.');
+    $('kpTotal').textContent='R$ '+brl(n===0?(tA?tA.preco:0):vk.total); if(!TIERS.length&&n>0) $('kpMsg').textContent='Pronto: finalize pelo WhatsApp ou continue escolhendo.';
+    $('kpEco').textContent=n===0?'':(vk.eco>0?'Você economiza R$ '+brl(vk.eco)+' em relação às peças avulsas.':(falta>0&&tA?'Complete '+alvo+' peças e o kit sai por R$ '+brl(tA.preco)+'.':''));
+    var ped=$('kpPedir'); ped.classList.toggle('off',n===0); ped.setAttribute('aria-disabled',n===0?'true':'false'); zapKit();
+    $('miniCont').textContent=n+' de '+alvo;
+    $('miniBand').innerHTML=slugs.map(function(s){ var p=porSlug(s); return '<button type="button" class="slot cheio" data-rem="'+s+'" title="Tirar '+p.titulo+'" aria-label="Tirar '+p.titulo+' do kit">'+(IMG[s]?'<img src="'+IMG[s]+'" alt="">':'')+'</button>'; }).join('');
+    miniAtualiza();
+  }
+  // mini barra do kit: aparece embaixo quando o estúdio sai da tela e já há peças escolhidas
+  var estudioVisivel=true;
+  function miniAtualiza(){ $('kitmini').classList.toggle('vis',nKit()>0&&!estudioVisivel); }
+  if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ estudioVisivel=es[0].isIntersecting; miniAtualiza(); },{threshold:.15}).observe($('kitpanel')); }
+  $('miniPedir').addEventListener('click',function(){ if(nKit()>0) window.open($('kpPedir').href,'_blank','noopener'); });
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-add],[data-rem],[data-vazio],[data-tier],[data-ver]'); if(!b) return;
+    if(b.dataset.ver){ abrePeca(b.dataset.ver); return; }
+    if(b.dataset.tier){ alvo=+b.dataset.tier; ajustaAlvo(); render(); return; }
+    if(b.dataset.vazio){ $('chips').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+    var s=b.dataset.add||b.dataset.rem;
+    if(kit[s]){ delete kit[s]; ultimo=null; } else { kit[s]=true; ultimo=s; }
+    render();
+  });
+  function pillsKit(){
+    var el=$('dPills'); el.innerHTML=''; $('dTit').textContent='Meu kit de Natal · '+tierTexto(nKit());
+    Object.keys(kit).forEach(function(s){
+      var p=porSlug(s), sp=document.createElement('span'); sp.className='pill'; sp.textContent=p.titulo+' ';
+      var x=document.createElement('button'); x.type='button'; x.setAttribute('aria-label','Remover '+p.titulo); x.textContent='×';
+      x.onclick=function(){delete kit[s]; render(); if(!Object.keys(kit).length) $('dlg').close(); else {pillsKit();link();}};
+      sp.appendChild(x); el.appendChild(sp);
+    });
+  }
+  function link(){
+    var h=new Date(); h=new Date(h.getFullYear(),h.getMonth(),h.getDate());
+    var av=$('dAviso'); av.className='aviso'; av.textContent='';
+    if($('dData').value){
+      var q=$('dData').value.split('-'), d=new Date(+q[0],+q[1]-1,+q[2]), dias=Math.round((d-h)/864e5);
+      if(dias<0){av.className='aviso urg';av.textContent='Essa data já passou. Escolha uma data futura.';}
+      else if(dias<20){av.className='aviso urg';av.textContent='Faltam só '+dias+' dias. Prazo curto: confirmamos com você se cabe na produção.';}
+      else {av.className='aviso ok';av.textContent='Faltam '+dias+' dias para essa data. Dá tempo de caprichar.';}
+    }
+    var itens=Object.keys(kit).map(function(s){return porSlug(s).titulo;});
+    var L=['Olá, GiftForma! Quero montar um kit de Natal: '+tierTexto(itens.length)+'.','Peças: '+itens.join(', ')+'.','Valor do kit: R$ '+brl(valorKit().total)+'.'];
+    if($('dNome').value.trim()) L.push('Nome/dedicatória no cartão: '+$('dNome').value.trim());
+    L.push('Quantos kits: '+($('dQtd').value||1));
+    if($('dData').value) L.push('Para o dia: '+$('dData').value.split('-').reverse().join('/'));
+    if($('dCor').value.trim()) L.push('Cor preferida: '+$('dCor').value.trim());
+    $('dZap').href='https://wa.me/'+ZAP+'?text='+encodeURIComponent(L.join('\n'));
+  }
+  $('kNome').addEventListener('input',zapKit); $('kpPedir').addEventListener('click',function(e){ if(nKit()===0) e.preventDefault(); });
+  ['dNome','dQtd','dData','dCor'].forEach(function(i){$(i).addEventListener('input',link);});
+  $('dForm').addEventListener('submit',function(){$('dlg').close();});
+
+  // ---------- peça individual ----------
+  var pecaAtual=null;
+  function abrePeca(slug){
+    var p=porSlug(slug); if(!p) return; pecaAtual=p;
+    $('pFoto').innerHTML=(IMGG[p.slug]||IMG[p.slug])?'<img src="'+(IMGG[p.slug]||IMG[p.slug])+'" alt="'+p.titulo+'">':'<div class="semfoto">Foto em breve</div>';
+    $('pTag').textContent=(GRUPOS[p.grupo]||'')+' · peça individual';
+    $('pTit').textContent=p.titulo; $('pMed').textContent=p.medidas||''; $('pDesc').textContent=p.descricao;
+    $('pNome').value=''; $('pQtd').value=1; $('pCor').value='';
+    $('pPreco').textContent=p.preco?brl(p.preco):'--,--';
+    pLink(); pKitRot(); $('dlgPeca').showModal();
+  }
+  function pKitRot(){ if(pecaAtual) $('pKit').textContent=kit[pecaAtual.slug]?'✓ No meu kit (tirar)':'+ Ao meu kit'; }
+  function pLink(){
+    if(!pecaAtual) return;
+    var L=['Olá, GiftForma! Quero esta peça avulsa: '+pecaAtual.titulo+(pecaAtual.preco?' (R$ '+brl(pecaAtual.preco)+' cada)':'')+'.'];
+    if($('pNome').value.trim()) L.push('Nome/dedicatória: '+$('pNome').value.trim());
+    L.push('Quantidade: '+($('pQtd').value||1));
+    if($('pCor').value.trim()) L.push('Cor preferida: '+$('pCor').value.trim());
+    $('pZap').href='https://wa.me/'+ZAP+'?text='+encodeURIComponent(L.join('\n'));
+  }
+  ['pNome','pQtd','pCor'].forEach(function(i){$(i).addEventListener('input',pLink);});
+  $('pKit').onclick=function(){ var s=pecaAtual.slug; if(kit[s]){delete kit[s];ultimo=null;} else {kit[s]=true;ultimo=s;} render(); pKitRot(); };
+
+  // ---------- rena do Papai Noel atravessando a página ----------
+  var voo=$('renaVoo');
+  function voar(){ voo.classList.remove('voando'); void voo.offsetWidth; voo.classList.add('voando'); }
+  voo.addEventListener('animationend',function(e){ if(e.animationName==='cruza') voo.classList.remove('voando'); });
+  setTimeout(voar,800); setInterval(voar,30000);
+  $('rever').addEventListener('click',voar);
+  // cabeçalho: transparente sobre o hero, sólido (cores da GiftForma) depois de rolar
+  function topo(){ $('topo').classList.toggle('solido',window.scrollY>40); }
+  window.addEventListener('scroll',topo,{passive:true}); topo();
+  document.querySelector('.logo .area').addEventListener('click',function(e){e.preventDefault();voar();});
+
+  // ---------- música de Natal: sintetizada no navegador, melodias tradicionais de domínio público ----------
+  var AC=null, mestre=null, ruido=null, musicaOn=false, timerMus=null, tuneIdx=0;
+  var SEMI={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+  function hz(n){ var x=/^([A-G])(#?)(\d)$/.exec(n); return 440*Math.pow(2,((12*(+x[3]+1)+SEMI[x[1]]+(x[2]?1:0))-69)/12); }
+  function seq(s){ return s.split(' ').map(function(x){var p=x.split(':'); return {n:p[0],d:+p[1]};}); }
+  var TUNES=[
+    {nome:'Jingle Bells',q:0.40,sino:true,
+     s:seq('E4:1 E4:1 E4:2 E4:1 E4:1 E4:2 E4:1 G4:1 C4:1.5 D4:.5 E4:4 F4:1 F4:1 F4:1.5 F4:.5 F4:1 E4:1 E4:1 E4:.5 E4:.5 E4:1 D4:1 D4:1 E4:1 D4:2 G4:2 E4:1 E4:1 E4:2 E4:1 E4:1 E4:2 E4:1 G4:1 C4:1.5 D4:.5 E4:4 F4:1 F4:1 F4:1.5 F4:.5 F4:1 E4:1 E4:1 E4:.5 E4:.5 G4:1 G4:1 F4:1 D4:1 C4:4')},
+    {nome:'We Wish You a Merry Christmas',q:0.42,sino:false,
+     s:seq('D4:1 G4:1 G4:.5 A4:.5 G4:.5 F#4:.5 E4:1 E4:1 E4:1 A4:1 A4:.5 B4:.5 A4:.5 G4:.5 F#4:1 D4:1 D4:1 B4:1 B4:.5 C5:.5 B4:.5 A4:.5 G4:1 E4:1 D4:.5 D4:.5 E4:1 A4:1 F#4:1 G4:3')}
+  ];
+  function nota(f,t,dur,vol){ // timbre de caixa de música: seno + harmônico, ataque curto e decaimento longo
+    var o1=AC.createOscillator(), o2=AC.createOscillator(), g=AC.createGain(), g2=AC.createGain(), fim=t+Math.max(.7,dur*2);
+    o1.type='sine'; o2.type='triangle'; o1.frequency.value=f; o2.frequency.value=f*2.003; g2.gain.value=.2;
+    o1.connect(g); o2.connect(g2); g2.connect(g); g.connect(mestre);
+    g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+.008); g.gain.exponentialRampToValueAtTime(.0001,fim-.05);
+    o1.start(t); o2.start(t); o1.stop(fim); o2.stop(fim);
+  }
+  function guizo(t){ // guizos de trenó: ruído agudo curtinho
+    var b=AC.createBufferSource(), f=AC.createBiquadFilter(), g=AC.createGain();
+    b.buffer=ruido; f.type='highpass'; f.frequency.value=6500; g.gain.setValueAtTime(.045,t); g.gain.exponentialRampToValueAtTime(.0001,t+.1);
+    b.connect(f); f.connect(g); g.connect(mestre); b.start(t); b.stop(t+.12);
+  }
+  function agendaTune(){
+    if(!musicaOn||!AC) return;
+    var T=TUNES[tuneIdx%TUNES.length]; tuneIdx++;
+    var t=AC.currentTime+.2, ini=t, q=T.q;
+    T.s.forEach(function(x){ var d=x.d*q; nota(hz(x.n),t,d,.17); t+=d; });
+    if(T.sino) for(var b=ini;b<t;b+=q) guizo(b);
+    $('musica').textContent='♪ Tocando · desligar';
+    timerMus=setTimeout(agendaTune,(t-AC.currentTime)*1000+900);
+  }
+  function setMusica(on){
+    var btn=$('musica'); btn.setAttribute('aria-pressed',on?'true':'false'); btn.setAttribute('aria-label',on?'Desligar música de Natal':'Ligar música de Natal');
+    if(on){
+      var Ctx=window.AudioContext||window.webkitAudioContext; if(!Ctx){ btn.textContent='Sem suporte a áudio'; return; }
+      AC=new Ctx(); mestre=AC.createGain(); mestre.gain.setValueAtTime(.0001,AC.currentTime); mestre.gain.linearRampToValueAtTime(.9,AC.currentTime+1.2); mestre.connect(AC.destination);
+      ruido=AC.createBuffer(1,Math.round(AC.sampleRate*.12),AC.sampleRate); var d=ruido.getChannelData(0); for(var i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+      musicaOn=true; tuneIdx=0; AC.resume(); agendaTune();
+    } else {
+      musicaOn=false; clearTimeout(timerMus); var a=AC, m=mestre; AC=null; mestre=null;
+      if(a){ m.gain.cancelScheduledValues(a.currentTime); m.gain.setValueAtTime(m.gain.value,a.currentTime); m.gain.linearRampToValueAtTime(.0001,a.currentTime+.5); setTimeout(function(){ a.close(); },700); }
+      btn.textContent='♪ Música de Natal';
+    }
+  }
+  $('musica').addEventListener('click',function(){ setMusica(!musicaOn); });
+
+  // ---------- contagem do Natal ----------
+  var h=new Date(); h=new Date(h.getFullYear(),h.getMonth(),h.getDate());
+  var nt=new Date(h.getFullYear(),11,25); if(nt<h) nt=new Date(h.getFullYear()+1,11,25);
+  var dias=Math.round((nt-h)/864e5); $('natDias').textContent=dias;
+  var pedir=new Date(nt.getTime()-30*864e5);
+  $('natPedir').textContent=pedir>h?'Recomendado: pedir até '+fmt(pedir)+' (30 dias antes). Depois disso, fale com a gente para ver o que cabe.':'Já estamos perto: fale com a gente para ver o que cabe na produção.';
+
+  // ---------- dados do painel (GET /publico/presentes) ----------
+  function carrega(){
+    $('grid').innerHTML='<p class="carregando">Carregando os presentes…</p>';
+    fetch(API+'/publico/presentes').then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json(); }).then(function(d){
+      var prods=d.produtos||[];
+      P=prods.map(function(x){ var s=slugar(x.nome); return {id:x.id,slug:s,titulo:x.nome,preco:x.preco,descricao:x.descricao||'',medidas:'',grupo:GRUPO_POR_PECA[s]||'outros',peca:true}; });
+      prods.forEach(function(x){ var s=slugar(x.nome); if(x.foto_mini||x.foto_url) IMG[s]=x.foto_mini||x.foto_url; if(x.foto_url) IMGG[s]=x.foto_url; if(ESC[s]) IMG[s+'_r']='assets/recortes/'+s+'.webp'; });
+      TIERS=(d.kits||[]).map(function(k){ return {n:k.qtd_pecas,preco:Number(k.preco),nome:'Kit com '+k.qtd_pecas+' peças',sub:''}; });
+      alvo=TIERS.length?TIERS[0].n:5;
+      render();
+      $('vazio').hidden=P.length>0;
+    }).catch(function(){
+      $('grid').innerHTML=''; $('vazio').textContent='Não conseguimos carregar os presentes agora. Fale com a gente pelo WhatsApp que ajudamos.'; $('vazio').hidden=false;
+    });
+  }
+  carrega();
+})();
+</script>
+</body>
+</html>

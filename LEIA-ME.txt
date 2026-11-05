@@ -1,0 +1,17 @@
+PAGINA REAL DE PRESENTES 3D  ->  presentes.giftforma.com.br
+
+- index.html e a pagina. Ela le os presentes e os precos dos kits direto do painel
+  (GET https://giftforma-api.onrender.com/publico/presentes). Nada de peca ou preco digitado na pagina.
+- Para testar no computador contra uma API local: abrir  http://localhost:PORTA/?api=http://127.0.0.1:8000
+  (o parametro ?api= so vale em localhost).
+- assets/recortes/<nome-da-peca>.webp: recorte (sem fundo) usado no prato. O nome vem do nome do produto
+  no painel (ex.: "Papai Noel" -> papai-noel.webp) e as proporcoes ficam em ESC no index.html.
+  Produto sem recorte aparece no prato como foto redonda.
+- gerar_pagina_real.py: gerou o index.html a partir da pagina de teste. Nao precisa rodar de novo.
+
+PUBLICAR (GitHub Pages, como o site principal)
+  1. Repositorio publico bernarfpe-source/giftforma-presentes, branch main, raiz, com estes arquivos.
+  2. Settings > Pages > Deploy from branch (main, /root). O arquivo CNAME ja diz presentes.giftforma.com.br.
+  3. DNS no Registro.br (zona avancada): registro CNAME  presentes  ->  bernarfpe-source.github.io.
+  4. Esperar o certificado e marcar "Enforce HTTPS" nas configuracoes do Pages.
+  5. API: o subdominio ja esta liberado no CORS (config.py + render.yaml, commit no projeto giftforma-central).
