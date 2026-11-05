@@ -1,3 +1,2 @@
 User-agent: *
-Allow: /
-Sitemap: https://presentes.giftforma.com.br/sitemap.xml
+Disallow: /
