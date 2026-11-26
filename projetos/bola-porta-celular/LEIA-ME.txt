@@ -1,34 +1,19 @@
-BOLA PORTA-CELULAR + PORTA-CANETAS  (brinde Rio Novo / FMT)
-
-O QUE E
-- Bola de futebol de 110 mm com abertura no topo para canetas e uma face plana na frente
-  onde o celular se apoia (inclinacao 78 graus), sobre uma base verde com bandeja.
-- Medidas finais: 110 x 106 x 90 mm (largura x profundidade x altura).
-- Bandeja: encaixe de 14 mm (celular + capinha), aba de 10 mm e vao central de 24 mm para o cabo.
+BOLA PORTA-CELULAR + PORTA-CANETAS  (brinde Rio Novo / FMT) -- modelado com text-to-cad
 
 ARQUIVOS
-- gerar_modelo.py ......... gera o modelo. Todas as medidas ficam no topo (secao PARAMETROS).
-- logos/rio-novo.png ...... logo oficial usado na lateral esquerda (o script separa o azul e o verde sozinho).
-- saida/bola-<cor>.stl .... uma peca por cor: branco, preto, verde, azul.
-- saida/bola-porta-celular.3mf .. todas as cores juntas (abrir no Bambu Studio / OrcaSlicer).
-- saida/resumo.json ....... volumes e medidas.
-- previews/ ............... imagens de conferencia.
+- src/bola.py ............ o modelo (build123d / text-to-cad). Medidas ajustaveis no topo (model.param).
+- logos/rio-novo.png ..... logo oficial; o script separa azul e verde e vetoriza sozinho.
+- STEP/ .................. CAD exato (abre no Fusion, SolidWorks, FreeCAD).
+- 3MF/ ................... para o fatiador (Bambu Studio / Orca): um objeto por cor, ja colorido.
 
-COMO IMPRIMIR (multicor, 4 filamentos: branco, preto, verde, azul)
-1. Bambu Studio / OrcaSlicer: importar os 4 STL de uma vez e responder "Sim" para
-   "carregar como um unico objeto com varias partes". Atribuir a cor de cada parte.
-2. Se o fatiador pedir para reparar o modelo, aceite (sao poucas arestas de encosto entre as cores).
-3. Sugestao: camada 0,2 mm, 3 paredes, preenchimento 15%, suporte so na bandeja se precisar.
-   O peso "se macico" do resumo cai para cerca de 40-50% com preenchimento 15%.
+RODAR (Windows PowerShell ou Linux)
+  irm https://www.texttocad.dev/install.ps1 | iex      (instala o cad, uma vez)
+  cad server start
+  cad run src/bola.py                                   (abre/atualiza o visualizador)
+  cad model export <id> STEP/bola_porta_celular.step 3MF/bola_porta_celular.3mf
+  cad model dfm <id> --process printing --technology fdm --material pla
 
-COMO MUDAR
-- Tamanho da bola, inclinacao, largura do encaixe do celular: edite PARAMETROS e rode
-    pip install manifold3d trimesh numpy opencv-python-headless shapely lxml networkx
-    python3 gerar_modelo.py
-- Logo FMT: salvar o logo OFICIAL em logos/fmt.png (fundo branco ou transparente) e
-  descomentar a linha da FMT em LOGOS. Hoje o script reconhece azul e verde; cores novas
-  (ex.: amarelo da FMT) precisam de mais uma entrada em "mascaras" e de mais um filamento.
+CHECAGEM DE IMPRESSAO (FDM, PLA): OK, 0 erros. Avisos restantes = encostos entre cores
+(normais em peca multicor) e pontas dos pentagonos cortados pela face/topo.
 
-PENDENCIAS
-- Logo oficial da FMT + autorizacao de uso da marca.
-- Imprimir 1 prototipo e conferir: celular encaixa com capinha? canetas cabem? logo legivel?
+PENDENCIAS: logo oficial da FMT (+ autorizacao), prototipo impresso.
