@@ -1,0 +1,28 @@
+{
+  "branco": {
+    "volume_cm3": 81.8,
+    "estanque": false,
+    "gramas_PLA_se_macico": 101.4
+  },
+  "preto": {
+    "volume_cm3": 3.7,
+    "estanque": true,
+    "gramas_PLA_se_macico": 4.6
+  },
+  "verde": {
+    "volume_cm3": 62.9,
+    "estanque": false,
+    "gramas_PLA_se_macico": 78.0
+  },
+  "azul": {
+    "volume_cm3": 0.1,
+    "estanque": true,
+    "gramas_PLA_se_macico": 0.1
+  },
+  "medidas_mm": {
+    "largura": 110.0,
+    "profundidade": 106.3,
+    "altura": 90.0
+  },
+  "piso_do_celular_y": -33.3
+}
