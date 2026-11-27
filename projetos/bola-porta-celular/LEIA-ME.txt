@@ -1,30 +1,40 @@
 BOLA PORTA-CELULAR + PORTA-CANETAS  (brinde Rio Novo / FMT) -- modelado com text-to-cad
+Formato aproximado do mockup: referencias/mockup-original.jpg
 
 PECAS (cada uma de uma cor, impressas separadas e montadas por encaixe, folga 0,2 mm por lado)
-  1) corpo_inferior ..... metade de baixo da bola (pino embaixo entra na base)
-     corpo_superior ..... metade de cima (o ressalto de baixo entra no canal da metade de baixo)
-  2) encosto ............ placa do celular (2 pinos atras entram na face da bola)
-  3) suporte ............ bandeja de baixo do celular (entra no recorte da base; o encosto entra no canal dela)
-  4) aro ................ anel do topo (espiga conica entra na boca da bola)
-  5) base ............... disco de 120 mm com berco
-  +  pastilha_rio_novo .. logo de encaixar no rebaixo do lado esquerdo
-     pastilha_fmt ....... lisa, lugar reservado no lado direito (falta o logo oficial da FMT)
-  Altura total 110 mm, base 120 mm.
+  1) corpo_inferior ........ metade de baixo da bola (o "pe" entra no rebaixo da base)
+     corpo_superior ........ metade de cima (o ressalto de baixo entra no canal da metade de baixo)
+  2) encosto ............... moldura verde em U do canal do celular; a nervura de tras desce pela fenda da bola
+  3) suporte ............... bandeja branca do celular (2 orelhas, vao no meio); entra no recorte da base
+  4) aro ................... anel fino da boca; trava o encosto por cima
+  5) base .................. disco verde de 120 mm
+  +  logo_rio_novo_azul .... o rio do logo Rio Novo (azul)
+     logo_rio_novo_verde ... as letras "io Novo" (verde)
+     logo_fmt .............. escudo liso no lugar do logo da FMT (falta o arquivo oficial)
+     emblema_bola .......... disco da frente da bandeja
+  Bola de 128 mm (um pouco maior que a base, como no mockup); altura total 110 mm; base 120 mm.
+  Canal do celular: 86 mm de largura (cabe celular de ate ~80 mm de largura).
 
-IMPRESSAO (FDM, PLA, sem suporte) -- os 3MF ja estao deitados na posicao certa
+MONTAGEM
+  1. Logos: encaixar cada peca de logo POR DENTRO da metade de cima (a plaquinha fica do lado de dentro);
+     as colunas saem rentes a superficie da bola. Uma gota de cola por dentro, se ficar folgado.
+  2. Fechar a bola (metade de cima sobre a de baixo) e por na base.
+  3. Suporte no recorte da frente da base.
+  4. Encosto: descer pela fenda da bola ate entrar no canal do suporte.
+  5. Aro na boca (trava o encosto).
+
+IMPRESSAO (FDM, PLA, sem suporte) -- os 3MF ja estao na posicao certa
   corpo_inferior: de boca para baixo.  corpo_superior e aro: de cabeca para baixo.
-  encosto: frente no prato.  suporte, base, pastilhas: como estao.
-  Pastilha Rio Novo em 3 cores numa impressora de um bico: imprimir em BRANCO e trocar o filamento
-  (pausa / M600) na 1a camada acima de 2,0 mm -> AZUL (rio) e na 1a camada acima de 3,0 mm -> VERDE (letras).
-  O fundo do porta-canetas e em V (cone no meio) para imprimir sem ponte.
+  encosto: em pe.  suporte, base: como ficam na mesa.  logos: plaquinha no prato.
+  emblema_bola: imprimir em branco e trocar para preto na 1a camada acima de 2,0 mm.
+  O fundo do porta-canetas e em V (cone no meio, oco por baixo) para imprimir sem ponte.
 
 ARQUIVOS
 - src/bola.py ............ o modelo (build123d / text-to-cad). Medidas ajustaveis no topo (model.param).
 - src/impressao.py ....... cada peca na posicao de imprimir.
 - src/exportar.py ........ gera 3MF/*.3mf (um por peca) e STEP/bola_5_pecas.step (montagem).
 - logos/rio-novo.png ..... logo oficial; o script separa azul e verde e vetoriza sozinho.
-- STEP/ .................. CAD exato da montagem (abre no Fusion, SolidWorks, FreeCAD).
-- 3MF/ ................... um arquivo por peca, para o fatiador (Bambu Studio / Orca).
+- referencias/ ........... mockup original.
 
 RODAR (Windows PowerShell ou Linux)
   irm https://www.texttocad.dev/install.ps1 | iex      (instala o cad, uma vez)
@@ -33,10 +43,11 @@ RODAR (Windows PowerShell ou Linux)
   cad run src/exportar.py                               (regrava os 3MF e o STEP)
 
 CHECAGEM DE IMPRESSAO (FDM, PLA), peca por peca na posicao de imprimir: nenhum erro.
-  Avisos restantes: corpo_superior com faces pequenas em balanco (cantos do rebaixo das pastilhas,
-  furos dos pinos do encosto = ponte de 6 mm, borda do topo a ~44 graus); pastilha Rio Novo com
-  vaos de ~0,3 mm entre letras (fecham na impressao, sem efeito).
-  Regras gerais de FDM, nao de uma impressora especifica. Montagem: nenhuma peca invade outra.
+  Avisos restantes: corpo_superior com pontes curtas (furo do escudo FMT ~30 mm, cantos do reforco
+  interno dos logos); suporte com o rebaixo do emblema (furo horizontal de 14 mm, 2 mm de fundo);
+  vaos pequenos entre letras nos logos. Regras gerais de FDM, nao de uma impressora especifica.
+  Montagem: nenhuma peca invade outra.
 
-PENDENCIAS: logo oficial da FMT (+ autorizacao); imagem de referencia das 5 pecas para aproximar o
-formato; prototipo impresso para acertar o aperto dos encaixes.
+PENDENCIAS: logo oficial da FMT (+ autorizacao); imagem referencia-5-pecas.png (nao veio no branch);
+faixas verde/amarela e pentagonos pretos do mockup (hoje os pentagonos sao so rebaixados);
+prototipo impresso para acertar o aperto dos encaixes.

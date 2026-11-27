@@ -5,11 +5,11 @@
 
   corpo_inferior   - de boca para baixo (a divisao no prato)
   corpo_superior   - de cabeca para baixo (o topo no prato)
-  encosto          - deitado com a frente no prato (pinos para cima)
+  encosto          - em pe, a ponta de baixo no prato (o perfil em U nao tem balanco)
   suporte, base    - como ficam na mesa
-  aro              - de cabeca para baixo (o topo no prato, espiga para cima)
-  pastilhas        - deitadas, fundo no prato, relevo para cima. Rio Novo: imprimir em branco e trocar
-                     o filamento na 1a camada acima de 2,0 mm (azul, rio) e na 1a acima de 3,0 mm (verde, letras).
+  aro              - de cabeca para baixo
+  logos            - plaquinha de tras no prato, colunas para cima
+  emblema_bola     - fundo no prato; imprimir em branco e trocar para preto na 1a camada acima de 2,0 mm
 
 Rodar:  cad run src/impressao.py
 Check:  cad model dfm "$ID" --process printing --technology fdm --material pla
@@ -37,15 +37,6 @@ def peca(shape, nome, cor):
     return shape
 
 
-def pastilha_deitada(p):
-    """A pastilha impressa e uma peca so: fundo e relevos fundidos, fundo no prato."""
-    partes = [s for _, _, s in bola.pecas_pastilha_local(p)]
-    s = partes[0]
-    for o in partes[1:]:
-        s = s + o
-    return s
-
-
 @model
 def imprimir_corpo_inferior():
     return peca(no_prato(bola.corpo_inferior().shape, virar=True), "corpo_inferior", bola.CORES["corpo_inferior"])
@@ -58,8 +49,8 @@ def imprimir_corpo_superior():
 
 @model
 def imprimir_encosto():
-    # mesma geometria do modelo `encosto`, no plano da face: frente no prato, pinos para cima
-    return peca(no_prato(bola.forma_encosto_local(), virar=True), "encosto", bola.CORES["encosto"])
+    # mesma geometria do modelo `encosto`, no plano do canal; a rampa (y local) vira a vertical
+    return peca(no_prato(bd.Rot(90, 0, 0) * bola.forma_encosto_local()), "encosto", bola.CORES["encosto"])
 
 
 @model
@@ -77,23 +68,34 @@ def imprimir_base():
     return peca(no_prato(bola.base().shape), "base", bola.CORES["base"])
 
 
-def _pastilha(i):
-    p = bola.PASTILHAS[i]
-    return peca(no_prato(pastilha_deitada(p)), f"pastilha_{p['nome']}", p["fundo"])
+def _logo(i, cor, nome):
+    return peca(no_prato(bola.geometria_logo(i)[0][cor]), nome, bola.LOGOS[i]["cores"][cor])
 
 
 @model
-def imprimir_pastilha_rio_novo():
-    return _pastilha(0)
+def imprimir_logo_rio_novo_azul():
+    return _logo(0, "azul", "logo_rio_novo_azul")
 
 
 @model
-def imprimir_pastilha_fmt():
-    return _pastilha(1)
+def imprimir_logo_rio_novo_verde():
+    return _logo(0, "verde", "logo_rio_novo_verde")
+
+
+@model
+def imprimir_logo_fmt():
+    return _logo(1, "escudo", "logo_fmt")
+
+
+@model
+def imprimir_emblema_bola():
+    disco, pent = bola.emblema_local()
+    return peca(no_prato(disco + pent), "emblema_bola", "#F4F4F2")
 
 
 TODAS = [imprimir_corpo_inferior, imprimir_corpo_superior, imprimir_encosto, imprimir_suporte,
-         imprimir_aro, imprimir_base, imprimir_pastilha_rio_novo, imprimir_pastilha_fmt]
+         imprimir_aro, imprimir_base, imprimir_logo_rio_novo_azul, imprimir_logo_rio_novo_verde,
+         imprimir_logo_fmt, imprimir_emblema_bola]
 
 if __name__ == "__main__":
     for m in TODAS:
