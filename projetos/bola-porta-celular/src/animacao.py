@@ -69,11 +69,12 @@ def bola_montagem_animada():
         entra(anim, peca, [(5.0, meio), (6.4, ZERO)])
     # 3) suporte pela frente, encosto descendo pela fenda
     entra(anim, "suporte", [(6.6, (0.0, -90.0, 0.0)), (7.8, ZERO)])
-    entra(anim, "encosto", [(8.0, tuple(100.0 * v for v in subida_fenda)), (9.6, ZERO)])
+    entra(anim, "apoios_celular", [(7.8, (0.0, 0.0, 40.0)), (8.6, ZERO)])
+    entra(anim, "encosto", [(8.6, tuple(100.0 * v for v in subida_fenda)), (9.6, ZERO)])
     # 4) emblema na bandeja e aro travando o encosto
     entra(anim, "emblema_bola", [(9.8, (0.0, -60.0, 0.0)), (10.6, ZERO)])
     entra(anim, "aro", [(10.8, (0.0, 0.0, 60.0)), (12.0, ZERO)])
-    for peca, t in [("suporte", 6.5), ("encosto", 7.9), ("emblema_bola", 9.7), ("aro", 10.7)]:
+    for peca, t in [("suporte", 6.5), ("apoios_celular", 7.8), ("encosto", 8.6), ("emblema_bola", 9.7), ("aro", 10.7)]:
         aparece(anim, peca, t)
     return montagem
 

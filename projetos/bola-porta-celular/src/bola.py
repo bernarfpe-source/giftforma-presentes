@@ -37,32 +37,36 @@ from cad.build123d import memo
 AQUI = os.path.dirname(os.path.abspath(__file__))
 
 # ------------------------------------------------------------------ PARAMETROS
-R = model.param("raio_bola", 64.0, min=45, max=75, unit="mm")
+R = model.param("raio_bola", 56.0, min=45, max=75, unit="mm")
 PAREDE = model.param("parede", 3.0, min=2, max=5, unit="mm")
-ANG_APOIO = model.param("inclinacao_celular", 75.0, min=65, max=88, unit="deg")
-D_APOIO = model.param("profundidade_canal", 32.0, min=15, max=45, unit="mm")
-CANAL_LARG = model.param("largura_canal", 92.0, min=60, max=100, unit="mm")
-CELULAR_ESP = model.param("encaixe_celular", 14.0, min=9, max=20, unit="mm")
-LOGO_LARG = model.param("largura_logo", 60.0, min=25, max=70, unit="mm")
+ANG_APOIO = model.param("inclinacao_celular", 82.0, min=70, max=86, unit="deg")
+CANAL_LARG = model.param("largura_canal", 66.0, min=56, max=96, unit="mm")
+CELULAR_ESP = model.param("encaixe_celular", 13.0, min=9, max=20, unit="mm")
+LOGO_LARG = model.param("largura_logo", 54.0, min=25, max=70, unit="mm")
 FOLGA = model.param("folga_encaixe", 0.2, min=0.1, max=0.4, unit="mm")
 
 ALTURA = 110.0        # altura total (topo do aro)
 BASE_R = 60.0         # raio da base (120 mm)
 BASE_H = 8.0          # espessura da base; a bola assenta em cima
-ZC = BASE_H + 50.0    # centro da bola
+ZC = BASE_H + 52.0    # centro da bola
 Z_TOPO = ALTURA - 6.0  # corte do topo da bola (o aro tem 6 mm)
 Z_CORTE = ZC - 14.0   # divisao entre as duas metades (abaixo dos logos)
 RESSALTO_H, RESSALTO_ESP = 3.0, 1.4
 Z_FUNDO_CONE = ZC - 22.0
-PE_R, PE_H = 36.0, 1.5             # "pe" da bola, entra no rebaixo da base
-ENC_ESP = 4.0                      # espessura do fundo da moldura do celular
-ABA_LAT = 3.0                      # espessura das abas laterais da moldura
-NERVURA_L, NERVURA_P = 8.0, 2.5    # nervura de tras do encosto (desce pela fenda da bola)
-PISO_Z = 18.0                      # piso onde o celular apoia
-ORELHA_H, ORELHA_L, ABA_ESP = 12.0, 22.0, 5.0
-SUP_MARGEM = 6.0                   # a bandeja passa 6 mm do canal de cada lado
-ENC_Z0 = PISO_Z - 6.0              # o encosto desce 6 mm para dentro da bandeja
-EMBLEMA_R, EMBLEMA_ESP = 7.0, 2.0
+PE_R, PE_H = 17.0, 1.5             # "pe" da bola, entra no rebaixo da base
+ENC_ESP = 3.0                      # espessura do encosto (placa verde)
+LABIO = 5.0                        # a borda branca do rebaixo fica 5 mm na frente da placa verde
+CANAL_MEIO = 56.0                  # largura do rebaixo na "cintura" (o rebaixo e mais largo em cima e embaixo)
+SAIA_LARG = 82.0                   # largura embaixo, onde o rebaixo entra na bandeja
+Z_OMBRO, Z_CINTURA, Z_SAIA = 78.0, 42.0, 32.0
+ENC_TOPO_Z = 100.0                 # topo do encosto
+PE_ENC_L, PE_ENC_H, PE_ENC_X = 12.0, 5.0, 24.0   # pezinhos do encosto (entram na base)
+PISO_Z = 22.0                      # piso da bandeja, onde o celular apoia
+BANDEJA_W = 50.0                   # meia largura da bandeja
+PONTA_W, PONTA_H = 7.0, 15.0       # pontas levantadas da bandeja (largura, altura acima do piso)
+BLOCO_X0, BLOCO_P, BLOCO_H = 14.0, 7.0, 10.0   # blocos verdes: de x = 14 ate a ponta, 7 de fundo, 10 de altura
+FRENTE_ESP = 3.0                   # parede da frente da bandeja
+EMBLEMA_R, EMBLEMA_ESP = 6.5, 2.0
 GOMO = 1.0           # profundidade dos gomos (rebaixo e peca preta); 1 mm = parede minima de 2 fios de 0,4
 LOGO_FOLGA = 0.15                  # folga dos logos nos furos da bola
 LOGO_APOIO = 1.5                   # espessura da plaquinha de tras dos logos
@@ -81,12 +85,13 @@ LOGOS = [
     # FMF (Federacao Mato-grossense de Futebol): escudo oficial em vetor. As metades verde e azul atravessam
     # a bola como os outros logos; as letras brancas e a estrela amarela sao insertos colados em rebaixos na
     # frente das metades. O "MT" pequeno do escudo fica de fora (tracos de 0,4 mm nao imprimem).
-    dict(nome="fmf", svg="../logos/fmf-escudo.svg", largura=32.0, azimute=-92.0, dz=13.0,
+    dict(nome="fmf", svg="../logos/fmf-escudo.svg", largura=28.0, azimute=-92.0, dz=11.0,
          cores={"verde": "#218218", "azul": "#24216D", "branco": "#F4F4F2", "amarelo": "#F8BC00"},
          insertos=("branco", "amarelo")),
 ]
 
 CORES = {"corpo_inferior": "#F4F4F2", "corpo_superior": "#F4F4F2", "encosto": "#2E8B3C",
+         "apoios_celular": "#2E8B3C",
          "suporte": "#F4F4F2", "aro": "#F4F4F2", "base": "#2E8B3C",
          "gomos_inferior": "#1A1A1A", "gomos_superior": "#1A1A1A"}
 
@@ -94,6 +99,38 @@ _a = math.radians(ANG_APOIO)
 C = bd.Vector(0, 0, ZC)
 N = bd.Vector(0, -math.sin(_a), math.cos(_a))      # normal do fundo do canal (frente/cima)
 CIMA = (bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)
+
+
+def meia_largura_canal(z):
+    """Meia largura do rebaixo na altura z: CANAL_LARG em cima, CANAL_MEIO na cintura, SAIA_LARG embaixo."""
+    if z >= Z_OMBRO:
+        return CANAL_LARG / 2
+    if z >= Z_CINTURA:
+        t = (Z_OMBRO - z) / (Z_OMBRO - Z_CINTURA)
+        return CANAL_LARG / 2 + t * (CANAL_MEIO - CANAL_LARG) / 2
+    if z >= Z_SAIA:
+        t = (Z_CINTURA - z) / (Z_CINTURA - Z_SAIA)
+        return CANAL_MEIO / 2 + t * (SAIA_LARG - CANAL_MEIO) / 2
+    return SAIA_LARG / 2
+
+
+def _tangente_borda():
+    """Distancia (do centro, ao longo de N) do plano inclinado que encosta na borda branca do rebaixo:
+    um celular largo apoia ali; um estreito cai no rebaixo e apoia na placa verde, LABIO mm atras."""
+    d = 0.0
+    z = BASE_H
+    while z <= Z_TOPO:
+        x = meia_largura_canal(z)
+        q = R ** 2 - x ** 2 - (z - ZC) ** 2
+        if q > 0:
+            y = -math.sqrt(q)
+            d = max(d, -y * math.sin(_a) + (z - ZC) * math.cos(_a))
+        z += 0.5
+    return d
+
+
+D_BORDA = _tangente_borda()
+D_APOIO = D_BORDA - LABIO - ENC_ESP                  # fundo do rebaixo = costas do encosto
 
 
 # ------------------------------------------------------------------ AJUDANTES
@@ -144,11 +181,22 @@ def y_local(z):
     return (z - (C + N * D_APOIO).Z) / math.sin(_a)
 
 
+def perfil_canal(mais_lado=0.0):
+    """Contorno do rebaixo no plano do encosto (x para a direita, y subindo pela rampa): largo em cima,
+    cintura no meio e saia embaixo, cantos arredondados. Aberto em cima (o celular passa) e embaixo."""
+    zs = [ALTURA + 80, Z_OMBRO, Z_CINTURA, Z_SAIA, -60]
+    meia = [(meia_largura_canal(z), y_local(z)) for z in zs]
+    pts = meia + [(-x, y) for x, y in reversed(meia)]
+    f = bd.Face(bd.Wire.make_polygon([bd.Vector(x, y, 0) for x, y in pts], close=True))
+    dobras = [v for v in f.vertices() if y_local(Z_SAIA) - 1 < v.Y < y_local(Z_OMBRO) + 1]
+    f = bd.fillet(dobras, 6.0)
+    return bd.offset(f, mais_lado) if mais_lado else f
+
+
 def canal(mais_lado=0.0, mais_fundo=0.0):
-    """O canal do celular na frente da bola: tudo na frente do plano de apoio entre as abas.
+    """O rebaixo do celular: tudo na frente do fundo do rebaixo, dentro do contorno.
     `mais_lado` alarga para os lados e `mais_fundo` recua o fundo (para as paredes e folgas)."""
-    w = CANAL_LARG + 2 * mais_lado
-    b = bd.Pos(0, 0, -mais_fundo) * bd.Box(w, 600, 300, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
+    b = bd.extrude(bd.Pos(0, 0, -mais_fundo) * perfil_canal(mais_lado), 300 + mais_fundo, dir=(0, 0, 1))
     return plano_apoio().location * b
 
 
@@ -183,7 +231,7 @@ def direcoes_pentagonos():
         for s2 in (-1, 1):
             vs += [bd.Vector(0, s1, s2 * phi), bd.Vector(s1, s2 * phi, 0), bd.Vector(s2 * phi, 0, s1)]
     # giro do padrao escolhido para deixar o maximo de gomos a vista, longe dos logos, do canal e da emenda
-    m = ((0.065533, -0.776219, -0.627049), (0.948556, -0.146608, 0.280619), (-0.309752, -0.613181, 0.726679))
+    m = ((0.011837, -0.012657, 0.99985), (-0.265324, 0.964037, 0.015345), (-0.964087, -0.265465, 0.008053))
     return [bd.Vector(*(r[0] * v.X + r[1] * v.Y + r[2] * v.Z for r in m)).normalized() for v in vs]
 
 
@@ -611,43 +659,38 @@ def logo_fmf_amarelo():
     return logo_peca(1, "amarelo")
 
 
-# ------------------------------------------------------------------ ENCOSTO (moldura em U)
+# ------------------------------------------------------------------ ENCOSTO (placa verde)
 def forma_encosto_local(folga=0.0):
-    """No plano do canal: fundo de z = 0 a ENC_ESP, abas laterais encostadas nas paredes do canal,
-    nervura atras (z < 0). Extrudado ao longo da rampa (y), cortado pela esfera e pelo topo."""
+    """Placa verde no plano do fundo do rebaixo (z local de 0 a ENC_ESP): o contorno do rebaixo menos a
+    folga, topo levemente curvo com cantos arredondados, desce ate a base e tem dois pezinhos."""
     f = folga
-    w = CANAL_LARG / 2 + f
-    y0, y1 = y_local(ENC_Z0) - f, y_local(Z_TOPO) + 30
-    fundo = bd.Pos(0, 0, -f) * bd.Rectangle(2 * w, ENC_ESP + 2 * f, align=(bd.Align.CENTER, bd.Align.MIN))
-    abas = [bd.Pos(s * (w - (ABA_LAT + 2 * f) / 2), -f) *
-            bd.Rectangle(ABA_LAT + 2 * f, 80, align=(bd.Align.CENTER, bd.Align.MIN)) for s in (-1, 1)]
-    nervura = bd.Pos(0, f) * bd.Rectangle(NERVURA_L + 2 * f, NERVURA_P + 2 * f, align=(bd.Align.CENTER, bd.Align.MAX))
-    def ao_longo(perfil):                                 # perfil no XY (y = z local) -> de y0 a y1
-        return bd.Pos(0, y1, 0) * (bd.Plane.XZ.location * bd.extrude(perfil, y1 - y0))
-
-    esf = bd.Pos(0, 0, -D_APOIO) * bd.Sphere(R + f)       # a esfera da bola, no plano do canal
-    abas_3d = ao_longo(abas[0] + abas[1]) & esf           # as abas acompanham a superficie da bola
-    corpo = ao_longo(fundo + nervura) + abas_3d
-    topo = bd.Plane(origin=(0, (Z_TOPO + f - (C + N * D_APOIO).Z) / math.sin(_a), 0),
-                    z_dir=(0, math.sin(_a), math.cos(_a)))
-    return bd.split(corpo, topo, keep=bd.Keep.BOTTOM)
+    y_baixo, y_topo = y_local(BASE_H), y_local(ENC_TOPO_Z)
+    faixa = bd.Pos(0, (y_baixo + y_topo) / 2 - 150) * bd.Rectangle(300, y_topo - y_baixo + 300)
+    arco = bd.Pos(0, y_topo - 400) * bd.Circle(400)                    # topo levemente curvo
+    placa = (perfil_canal(f - FOLGA) & faixa & arco).faces()[0]
+    cantos = [v for v in placa.vertices() if v.Y > y_topo - 5 and abs(v.X) > 5]   # os dois cantos do topo
+    placa = bd.fillet(cantos, 8.0)
+    placa = (placa & (bd.Pos(0, y_baixo + 200 - f) * bd.Rectangle(300, 400))).faces()[0]
+    pes = [bd.Pos(s * PE_ENC_X, y_baixo - PE_ENC_H / 2 + 0.5) * bd.Rectangle(PE_ENC_L + 2 * f, PE_ENC_H + 1 + 2 * f)
+           for s in (-1, 1)]
+    forma = placa + pes[0] + pes[1]
+    return bd.extrude(bd.Pos(0, 0, -f) * forma, ENC_ESP + 2 * f, dir=(0, 0, 1))
 
 
 def forma_encosto(folga=0.0):
-    return plano_apoio().location * forma_encosto_local(folga)
+    e = plano_apoio().location * forma_encosto_local(folga)
+    # na altura da bola, a placa fica por dentro da superficie (embutida, sem canto saindo para fora)
+    return abaixo(e, Z_SAIA) + (acima(e, Z_SAIA) & esfera(R - 0.6 + folga))
 
 
-def fenda_nervura():
-    """A fenda da bola por onde a nervura desce (aberta no topo)."""
-    f = FOLGA
-    b = bd.Box(NERVURA_L + 2 * f, 600, NERVURA_P + 2 * f, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MAX))
-    b = bd.Pos(0, 300 + y_local(ENC_Z0) - 1, 0.01) * b
-    return plano_apoio().location * b
+def forma_encosto_local_recortada():
+    """A placa como ela e de fato (recortada pela bola), de volta ao plano dela: para imprimir."""
+    return plano_apoio().location.inverse() * forma_encosto()
 
 
 @model
 def encosto():
-    """2) Moldura verde em U do canal do celular."""
+    """2) Placa verde do celular, com dois pezinhos que entram na base."""
     e = forma_encosto()
     e.label = "encosto"
     return e
@@ -665,7 +708,7 @@ def cavidade():
     fundo = cone(r_v, r_b, z_f, Z_FUNDO_CONE + 0.01)
     meio = abaixo(acima(esfera(R - PAREDE), Z_FUNDO_CONE), z_c)
     centro = cone(r_v, 0.0, z_f - 0.01, z_f + r_v)       # o cone do meio inteiro, com ponta
-    return fundo + meio + teto - centro - canal(PAREDE, PAREDE + NERVURA_P)
+    return fundo + meio + teto - centro - canal(PAREDE, PAREDE)
 
 
 def oco_do_pe():
@@ -683,7 +726,7 @@ def ressalto(folga=0.0):
     r0 = r_esfera_em(R - PAREDE, Z_CORTE) - 0.6
     a = anel(r0 - (3.0 if folga else 0.0), r0 + RESSALTO_ESP + folga, Z_CORTE - RESSALTO_H - folga,
              Z_CORTE + (1.0 if folga else 0.0))
-    return a - canal(PAREDE + 1.0 - folga, PAREDE + NERVURA_P + 1.0 - folga)
+    return a - canal(PAREDE + 1.0 - folga, PAREDE + 1.0 - folga)
 
 
 def _evitar_gomos():
@@ -707,7 +750,7 @@ def corpo_inteiro():
         bola = bola - bd.Compound(gomos)
     for i in range(len(LOGOS)):
         bola = bola - no_lugar(i, geometria_logo(i)[1])
-    return bola - fenda_nervura()
+    return bola
 
 
 @model
@@ -732,7 +775,7 @@ def gomos_na_bola():
     """Os pentagonos pretos que preenchem os rebaixos dos gomos, rentes a superficie da bola.
     Impressao: junto com a metade da bola, em multicor (AMS), ou pintar o rebaixo e dispensar."""
     gomos = pentagonos(_evitar_gomos())
-    fora = abaixo(acima(esfera(R), BASE_H), Z_TOPO) - canal(FOLGA) - fenda_nervura()
+    fora = abaixo(acima(esfera(R), BASE_H), Z_TOPO) - canal(FOLGA)
     return bd.Compound(gomos) & fora
 
 
@@ -757,58 +800,99 @@ def gomos_superior():
     return _gomos(acima, "gomos_superior")
 
 
-# ------------------------------------------------------------------ SUPORTE (bandeja)
+# ------------------------------------------------------------------ SUPORTE (bandeja em U)
 def envoltoria_bola(f):
     """O volume da bola por fora (sem a cavidade), alargado de `f`."""
     return acima(esfera(R + f), BASE_H - PE_H - f) - canal(-f, -f)
 
 
+def y_no_encosto(z, frente=True):
+    """y da face da frente (ou de tras) do encosto na altura z."""
+    return (plano_apoio().location * bd.Pos(0, y_local(z), ENC_ESP if frente else 0.0)).position.Y
+
+
 def medidas_suporte():
-    p = plano_apoio()
-    frente = (p.location * bd.Pos(0, y_local(PISO_Z), ENC_ESP)).position.Y
-    y_aba = frente - CELULAR_ESP
-    return y_aba, y_aba - ABA_ESP
+    """(y das costas dos blocos verdes, y da frente dos blocos, y da frente da bandeja)."""
+    y_cel = y_no_encosto(PISO_Z)                # costas de um celular apoiado na placa verde
+    y_bloco = y_cel - CELULAR_ESP
+    y_bfrente = y_bloco - BLOCO_P
+    return y_bloco, y_bfrente, y_bfrente - FRENTE_ESP
 
 
-def forma_suporte(folga=0.0):
-    """Planta da bandeja (bloco cheio, antes dos recortes); tambem e o recorte da base."""
-    y_aba, y_frente = medidas_suporte()
-    w = CANAL_LARG / 2 + SUP_MARGEM + folga
-    y_tras = (plano_apoio().location * bd.Pos(0, y_local(BASE_H), 0)).position.Y + 12.0
-    bloco = caixa(-w, w, y_frente - folga, y_tras, 0, PISO_Z, 8.0)
-    return bd.split(bloco, plano_apoio(5.0 + folga), keep=bd.Keep.TOP)
+def _frente_curva(y_frente, folga=0.0):
+    """Frente da bandeja levemente curva (convexa), vista de cima."""
+    ra = 110.0
+    return bd.Pos(0, y_frente - folga + ra, -50) * bd.Cylinder(ra + folga, 300, align=CIMA)
+
+
+def bloco_verde(sx, folga=0.0):
+    y_bloco, y_bfrente, _ = medidas_suporte()
+    x0, x1 = BLOCO_X0 - folga, BANDEJA_W - PONTA_W + folga
+    b = caixa(x0, x1, y_bfrente - 12.0, y_bloco + folga, PISO_Z - 2.0 - folga, PISO_Z + BLOCO_H + folga)
+    _, _, y_frente = medidas_suporte()
+    b = b & _frente_curva(y_frente + FRENTE_ESP, folga)   # frente do bloco na mesma curva da bandeja
+    if not folga:
+        b = bd.fillet(b.edges().filter_by(bd.Axis.X).group_by(bd.Axis.Z)[-1], 2.0)
+    return bd.mirror(b, bd.Plane.YZ) if sx < 0 else b
 
 
 def emblema_plano():
-    _, y_frente = medidas_suporte()
-    return bd.Plane(origin=(0, y_frente, PISO_Z / 2), x_dir=(1, 0, 0), z_dir=(0, -1, 0))
+    _, _, y_frente = medidas_suporte()
+    return bd.Plane(origin=(0, y_frente, (BASE_H + PISO_Z) / 2), x_dir=(1, 0, 0), z_dir=(0, -1, 0))
 
 
 @model
 def suporte():
-    """3) Bandeja do celular: piso, duas orelhas na frente com vao no meio, canal do encosto,
-    rebaixo do emblema na frente."""
-    y_aba, y_frente = medidas_suporte()
-    w = CANAL_LARG / 2 + SUP_MARGEM
-    orelhas = [caixa(s * w - (ORELHA_L if s > 0 else 0), s * w + (ORELHA_L if s < 0 else 0),
-                     y_frente, y_aba, 0, PISO_Z + ORELHA_H, 2.0) for s in (-1, 1)]
-    s = forma_suporte() + orelhas[0] + orelhas[1]
-    s = s - envoltoria_bola(FOLGA) - forma_encosto(FOLGA)
+    """3) Bandeja branca em U: piso, pontas levantadas, frente curva com o emblema; por tras ela se curva
+    para dentro, acompanhando a bola. Os blocos verdes encaixam em rebaixos do piso."""
+    y_bloco, y_bfrente, y_frente = medidas_suporte()
+    y_tras = y_no_encosto(PISO_Z, frente=False) + 6.0     # so ate logo atras da placa verde
+    y_cel = y_bloco + CELULAR_ESP
+    w = BANDEJA_W
+    piso = caixa(-w, w, y_frente, y_tras, BASE_H, PISO_Z)
+    # pontas levantadas: curtas, da frente ate o celular (como na referencia)
+    pontas = [caixa(s * w - (PONTA_W if s > 0 else 0), s * w + (PONTA_W if s < 0 else 0),
+                    y_frente, y_cel + 2.0, BASE_H, PISO_Z + PONTA_H) for s in (-1, 1)]
+    s = piso + pontas[0] + pontas[1]
+    s = s & _frente_curva(y_frente)
+    cantos = [e for e in s.edges().filter_by(bd.Axis.Z) if e.center().Y < y_frente + 8 and abs(e.center().X) > w - 1]
+    try:
+        s = bd.fillet(cantos, 5.0)
+    except Exception:
+        pass
+    topo_pontas = [e for e in s.edges().filter_by(bd.Axis.Y) if e.center().Z > PISO_Z + PONTA_H - 0.1]
+    s = bd.fillet(topo_pontas, 3.0)                    # pontas com o topo arredondado
+    s = s - envoltoria_bola(FOLGA) - forma_encosto(FOLGA) - bloco_verde(1, FOLGA) - bloco_verde(-1, FOLGA)
     s = s - emblema_plano().location * bd.Cylinder(EMBLEMA_R + FOLGA, 2 * EMBLEMA_ESP)
     s = _maior(s)
     s.label = "suporte"
     return s
 
 
+@model
+def apoios_celular():
+    """3b) Os dois blocos verdes da bandeja (o celular apoia atras deles; vao do cabo no meio)."""
+    a = bd.Compound(children=[bloco_verde(1), bloco_verde(-1)])
+    a.label = "apoios_celular"
+    a.color = CORES["apoios_celular"]
+    return a
+
+
 def emblema_local():
+    """Disco branco + desenho de bola em relevo (pentagono do meio e cinco gomos cortados na borda)."""
     disco = bd.Pos(0, 0, -EMBLEMA_ESP) * bd.Cylinder(EMBLEMA_R, EMBLEMA_ESP, align=CIMA)
-    pent = bd.RegularPolygon(3.4, 5)
-    return disco, bd.extrude(pent, 0.8)
+    pent = bd.RegularPolygon(2.5, 5)
+    borda = bd.Circle(EMBLEMA_R - 0.4)
+    for k in range(5):
+        a = math.radians(90 + 36 + 72 * k)
+        pent = pent + (bd.Pos(5.3 * math.cos(a), 5.3 * math.sin(a)) * bd.Rot(0, 0, 36) * bd.RegularPolygon(2.3, 5))
+    desenho = pent & borda
+    return disco, bd.extrude(desenho, 0.8)
 
 
 @model
 def emblema_bola():
-    """Disco de bola da frente da bandeja: branco com pentagono preto em relevo."""
+    """Disco de bola da frente da bandeja: branco com o desenho preto em relevo."""
     disco, pent = emblema_local()
     loc = emblema_plano().location
     d, p = loc * disco, loc * pent
@@ -822,7 +906,7 @@ def emblema_bola():
 # ------------------------------------------------------------------ ARO E BASE
 @model
 def aro():
-    """4) Anel fino da boca, com espiga conica; interrompido no canal; trava o encosto."""
+    """4) Anel da boca, com espiga conica; aberto so na frente, onde o celular passa."""
     _, _, r_boca = boca()
     r_int = r_boca - FOLGA - 2.6
     r_ext = r_esfera_em(R, Z_TOPO) + 1.0
@@ -830,26 +914,32 @@ def aro():
     a = bd.fillet(a.edges().filter_by(bd.GeomType.CIRCLE).sort_by(bd.Axis.Z)[-2:], 2.0)
     f = FOLGA * 1.42
     espiga = cone(r_boca + 5.0 - f, r_boca - f, Z_TOPO - 5.0, Z_TOPO) + cilindro(r_boca - f, Z_TOPO - 0.01, Z_TOPO + 0.5)
-    espiga = espiga - cilindro(r_int, Z_TOPO - 6, Z_TOPO + 1) - canal(PAREDE + FOLGA, PAREDE + NERVURA_P + FOLGA)
+    espiga = espiga - cilindro(r_int, Z_TOPO - 6, Z_TOPO + 1) - canal(PAREDE + FOLGA, PAREDE + FOLGA)
     a = _maior(a - canal(FOLGA, 0.0) + espiga)
     a.label = "aro"
     return a
 
 
+def base_centro_y():
+    """A base (120 mm) fica um pouco para a frente da bola, para caber a bandeja."""
+    _, _, y_frente = medidas_suporte()
+    return min(0.0, y_frente - 2.0 + BASE_R)
+
+
 @model
 def base():
-    """5) Disco verde de 120 mm; rebaixo do pe da bola e recorte da bandeja."""
-    b = cilindro(BASE_R, 0, BASE_H)
+    """5) Disco verde de 120 mm; rebaixo do pe da bola e os dois encaixes do encosto."""
+    b = cilindro(BASE_R, 0, BASE_H, y=base_centro_y())
     b = bd.fillet(b.edges().filter_by(bd.GeomType.CIRCLE).sort_by(bd.Axis.Z)[-1], 3.0)
     b = b - cilindro(PE_R + FOLGA, BASE_H - PE_H - FOLGA, BASE_H + 1)
-    b = _maior(b - forma_suporte(FOLGA))
+    b = _maior(b - forma_encosto(FOLGA))           # os dois encaixes dos pezinhos do encosto
     b.label = "base"
     return b
 
 
 PECAS = [("corpo_inferior", corpo_inferior), ("corpo_superior", corpo_superior),
          ("gomos_inferior", gomos_inferior), ("gomos_superior", gomos_superior), ("encosto", encosto),
-         ("suporte", suporte), ("aro", aro), ("base", base),
+         ("suporte", suporte), ("apoios_celular", apoios_celular), ("aro", aro), ("base", base),
          ("logo_rio_novo_azul", logo_rio_novo_azul), ("logo_rio_novo_verde", logo_rio_novo_verde),
          ("logo_rio_novo_faixa_verde", logo_rio_novo_faixa_verde),
          ("logo_rio_novo_faixa_amarela", logo_rio_novo_faixa_amarela),

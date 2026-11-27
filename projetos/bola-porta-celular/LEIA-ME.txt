@@ -73,3 +73,14 @@ ESCUDO DA FMF (Federacao Mato-grossense de Futebol)
 - O "MT" pequeno do escudo ficou de fora: tracos de 0,4 mm nao imprimem.
 - Montagem: encaixar as metades por dentro da metade de cima da bola, junto com a Rio Novo; depois colar
   as letras e a estrela pela frente.
+
+NOVA FRENTE (padrao da referencia, 27/11/2026)
+- Bola de 112 mm sobre base de 120 mm, 110 mm de altura (antes: bola de 128 mm).
+- Rebaixo na frente com borda branca de 5 mm, aberto em cima (o celular passa): 66 mm em cima, 56 mm na
+  cintura, 82 mm embaixo. Celular de 72 mm ou mais apoia na borda branca; menor apoia na placa verde.
+- encosto: placa verde de 3 mm com topo curvo e 2 pezinhos que entram nos 2 encaixes da base.
+- suporte: bandeja branca em U com pontas levantadas e frente curva; por tras ela se curva para dentro,
+  abracando a bola. apoios_celular: os 2 blocos verdes (encaixam em rebaixos do piso; vao do cabo no meio).
+- emblema_bola: bola classica (pentagono + 5 gomos) em relevo preto.
+- base: disco verde de 120 mm com os 2 encaixes do encosto.
+- Montagem: base > bola > encosto (pezinhos na base) > bandeja > blocos verdes > emblema > aro.

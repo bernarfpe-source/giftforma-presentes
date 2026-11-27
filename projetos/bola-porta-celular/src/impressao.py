@@ -6,7 +6,8 @@
   corpo_inferior   - de boca para baixo (a divisao no prato); 2 cores: branco + gomos pretos (AMS)
   corpo_superior   - de cabeca para baixo (o topo no prato); 2 cores: branco + gomos pretos (AMS)
                      sem AMS: imprimir so o branco e pintar os rebaixos dos gomos de preto
-  encosto          - em pe, a ponta de baixo no prato (o perfil em U nao tem balanco)
+  encosto          - deitado de costas no prato (placa com os pezinhos)
+  apoios_celular   - os dois blocos verdes, de pe
   suporte, base    - como ficam na mesa
   aro              - de cabeca para baixo
   logos            - plaquinha de tras no prato, colunas para cima
@@ -60,12 +61,20 @@ def imprimir_corpo_superior():
 @model
 def imprimir_encosto():
     # mesma geometria do modelo `encosto`, no plano do canal; a rampa (y local) vira a vertical
-    return peca(no_prato(bd.Rot(90, 0, 0) * bola.forma_encosto_local()), "encosto", bola.CORES["encosto"])
+    # placa deitada de costas no prato (os pezinhos ficam no mesmo plano: sem suporte)
+    return peca(no_prato(bola.forma_encosto_local_recortada()), "encosto", bola.CORES["encosto"])
 
 
 @model
 def imprimir_suporte():
     return peca(no_prato(bola.suporte().shape), "suporte", bola.CORES["suporte"])
+
+
+@model
+def imprimir_apoios_celular():
+    """Os dois blocos verdes, de pe como ficam na bandeja."""
+    a = bd.Compound([bola.bloco_verde(1), bola.bloco_verde(-1)])
+    return peca(no_prato(a), "apoios_celular", bola.CORES["apoios_celular"])
 
 
 @model
@@ -129,6 +138,7 @@ def imprimir_emblema_bola():
 
 
 TODAS = [imprimir_corpo_inferior, imprimir_corpo_superior, imprimir_encosto, imprimir_suporte,
+         imprimir_apoios_celular,
          imprimir_aro, imprimir_base, imprimir_logo_rio_novo_azul, imprimir_logo_rio_novo_verde,
          imprimir_logo_rio_novo_faixa_verde, imprimir_logo_rio_novo_faixa_amarela,
          imprimir_logo_fmf_verde, imprimir_logo_fmf_azul, imprimir_logo_fmf_branco,
