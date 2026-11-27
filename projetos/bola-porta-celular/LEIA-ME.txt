@@ -1,19 +1,42 @@
 BOLA PORTA-CELULAR + PORTA-CANETAS  (brinde Rio Novo / FMT) -- modelado com text-to-cad
 
+PECAS (cada uma de uma cor, impressas separadas e montadas por encaixe, folga 0,2 mm por lado)
+  1) corpo_inferior ..... metade de baixo da bola (pino embaixo entra na base)
+     corpo_superior ..... metade de cima (o ressalto de baixo entra no canal da metade de baixo)
+  2) encosto ............ placa do celular (2 pinos atras entram na face da bola)
+  3) suporte ............ bandeja de baixo do celular (entra no recorte da base; o encosto entra no canal dela)
+  4) aro ................ anel do topo (espiga conica entra na boca da bola)
+  5) base ............... disco de 120 mm com berco
+  +  pastilha_rio_novo .. logo de encaixar no rebaixo do lado esquerdo
+     pastilha_fmt ....... lisa, lugar reservado no lado direito (falta o logo oficial da FMT)
+  Altura total 110 mm, base 120 mm.
+
+IMPRESSAO (FDM, PLA, sem suporte) -- os 3MF ja estao deitados na posicao certa
+  corpo_inferior: de boca para baixo.  corpo_superior e aro: de cabeca para baixo.
+  encosto: frente no prato.  suporte, base, pastilhas: como estao.
+  Pastilha Rio Novo em 3 cores numa impressora de um bico: imprimir em BRANCO e trocar o filamento
+  (pausa / M600) na 1a camada acima de 2,0 mm -> AZUL (rio) e na 1a camada acima de 3,0 mm -> VERDE (letras).
+  O fundo do porta-canetas e em V (cone no meio) para imprimir sem ponte.
+
 ARQUIVOS
 - src/bola.py ............ o modelo (build123d / text-to-cad). Medidas ajustaveis no topo (model.param).
+- src/impressao.py ....... cada peca na posicao de imprimir.
+- src/exportar.py ........ gera 3MF/*.3mf (um por peca) e STEP/bola_5_pecas.step (montagem).
 - logos/rio-novo.png ..... logo oficial; o script separa azul e verde e vetoriza sozinho.
-- STEP/ .................. CAD exato (abre no Fusion, SolidWorks, FreeCAD).
-- 3MF/ ................... para o fatiador (Bambu Studio / Orca): um objeto por cor, ja colorido.
+- STEP/ .................. CAD exato da montagem (abre no Fusion, SolidWorks, FreeCAD).
+- 3MF/ ................... um arquivo por peca, para o fatiador (Bambu Studio / Orca).
 
 RODAR (Windows PowerShell ou Linux)
   irm https://www.texttocad.dev/install.ps1 | iex      (instala o cad, uma vez)
   cad server start
   cad run src/bola.py                                   (abre/atualiza o visualizador)
-  cad model export <id> STEP/bola_porta_celular.step 3MF/bola_porta_celular.3mf
-  cad model dfm <id> --process printing --technology fdm --material pla
+  cad run src/exportar.py                               (regrava os 3MF e o STEP)
 
-CHECAGEM DE IMPRESSAO (FDM, PLA): OK, 0 erros. Avisos restantes = encostos entre cores
-(normais em peca multicor) e pontas dos pentagonos cortados pela face/topo.
+CHECAGEM DE IMPRESSAO (FDM, PLA), peca por peca na posicao de imprimir: nenhum erro.
+  Avisos restantes: corpo_superior com faces pequenas em balanco (cantos do rebaixo das pastilhas,
+  furos dos pinos do encosto = ponte de 6 mm, borda do topo a ~44 graus); pastilha Rio Novo com
+  vaos de ~0,3 mm entre letras (fecham na impressao, sem efeito).
+  Regras gerais de FDM, nao de uma impressora especifica. Montagem: nenhuma peca invade outra.
 
-PENDENCIAS: logo oficial da FMT (+ autorizacao), prototipo impresso.
+PENDENCIAS: logo oficial da FMT (+ autorizacao); imagem de referencia das 5 pecas para aproximar o
+formato; prototipo impresso para acertar o aperto dos encaixes.
