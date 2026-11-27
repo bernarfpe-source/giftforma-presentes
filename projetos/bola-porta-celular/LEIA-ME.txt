@@ -10,10 +10,11 @@ PECAS (cada uma de uma cor, impressas separadas e montadas por encaixe, folga 0,
   5) base .................. disco verde de 120 mm
   +  logo_rio_novo_azul .... o rio do logo Rio Novo (azul)
      logo_rio_novo_verde ... as letras "io Novo" (verde)
+     logo_rio_novo_faixa_verde / logo_rio_novo_faixa_amarela ... as faixas em arco por baixo do logo
      logo_fmt .............. escudo liso no lugar do logo da FMT (falta o arquivo oficial)
      emblema_bola .......... disco da frente da bandeja
   Bola de 128 mm (um pouco maior que a base, como no mockup); altura total 110 mm; base 120 mm.
-  Canal do celular: 86 mm de largura (cabe celular de ate ~80 mm de largura).
+  Canal do celular: 92 mm de largura (celular grande com capinha, ate ~86 mm de largura).
 
 MONTAGEM
   1. Logos: encaixar cada peca de logo POR DENTRO da metade de cima (a plaquinha fica do lado de dentro);
@@ -28,6 +29,7 @@ IMPRESSAO (FDM, PLA, sem suporte) -- os 3MF ja estao na posicao certa
   encosto: em pe.  suporte, base: como ficam na mesa.  logos: plaquinha no prato.
   emblema_bola: imprimir em branco e trocar para preto na 1a camada acima de 2,0 mm.
   O fundo do porta-canetas e em V (cone no meio, oco por baixo) para imprimir sem ponte.
+  Pentagonos: so rebaixados 0,6 mm na bola (pintar, ou imprimir multicor).
 
 ARQUIVOS
 - src/bola.py ............ o modelo (build123d / text-to-cad). Medidas ajustaveis no topo (model.param).
@@ -43,11 +45,10 @@ RODAR (Windows PowerShell ou Linux)
   cad run src/exportar.py                               (regrava os 3MF e o STEP)
 
 CHECAGEM DE IMPRESSAO (FDM, PLA), peca por peca na posicao de imprimir: nenhum erro.
-  Avisos restantes: corpo_superior com pontes curtas (furo do escudo FMT ~30 mm, cantos do reforco
-  interno dos logos); suporte com o rebaixo do emblema (furo horizontal de 14 mm, 2 mm de fundo);
+  Avisos restantes: corpo_superior com pontes curtas nas bordas dos furos dos logos e das faixas
+  (vao de ~3,5 mm; a maior ponte tem 7 mm) e no furo do escudo FMT; suporte com o rebaixo do emblema (furo horizontal de 14 mm, 2 mm de fundo);
   vaos pequenos entre letras nos logos. Regras gerais de FDM, nao de uma impressora especifica.
   Montagem: nenhuma peca invade outra.
 
 PENDENCIAS: logo oficial da FMT (+ autorizacao); imagem referencia-5-pecas.png (nao veio no branch);
-faixas verde/amarela e pentagonos pretos do mockup (hoje os pentagonos sao so rebaixados);
 prototipo impresso para acertar o aperto dos encaixes.

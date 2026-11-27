@@ -83,6 +83,16 @@ def imprimir_logo_rio_novo_verde():
 
 
 @model
+def imprimir_logo_rio_novo_faixa_verde():
+    return _logo(0, "faixa_verde", "logo_rio_novo_faixa_verde")
+
+
+@model
+def imprimir_logo_rio_novo_faixa_amarela():
+    return _logo(0, "faixa_amarela", "logo_rio_novo_faixa_amarela")
+
+
+@model
 def imprimir_logo_fmt():
     return _logo(1, "escudo", "logo_fmt")
 
@@ -95,6 +105,7 @@ def imprimir_emblema_bola():
 
 TODAS = [imprimir_corpo_inferior, imprimir_corpo_superior, imprimir_encosto, imprimir_suporte,
          imprimir_aro, imprimir_base, imprimir_logo_rio_novo_azul, imprimir_logo_rio_novo_verde,
+         imprimir_logo_rio_novo_faixa_verde, imprimir_logo_rio_novo_faixa_amarela,
          imprimir_logo_fmt, imprimir_emblema_bola]
 
 if __name__ == "__main__":

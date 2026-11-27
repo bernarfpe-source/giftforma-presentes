@@ -41,7 +41,7 @@ R = model.param("raio_bola", 64.0, min=45, max=75, unit="mm")
 PAREDE = model.param("parede", 3.0, min=2, max=5, unit="mm")
 ANG_APOIO = model.param("inclinacao_celular", 75.0, min=65, max=88, unit="deg")
 D_APOIO = model.param("profundidade_canal", 32.0, min=15, max=45, unit="mm")
-CANAL_LARG = model.param("largura_canal", 86.0, min=60, max=100, unit="mm")
+CANAL_LARG = model.param("largura_canal", 92.0, min=60, max=100, unit="mm")
 CELULAR_ESP = model.param("encaixe_celular", 14.0, min=9, max=20, unit="mm")
 LOGO_LARG = model.param("largura_logo", 50.0, min=25, max=60, unit="mm")
 FOLGA = model.param("folga_encaixe", 0.2, min=0.1, max=0.4, unit="mm")
@@ -68,8 +68,12 @@ LOGO_FOLGA = 0.15                  # folga dos logos nos furos da bola
 LOGO_APOIO = 1.5                   # espessura da plaquinha de tras dos logos
 
 LOGOS = [
-    dict(nome="rio_novo", arquivo="../logos/rio-novo.png", largura=LOGO_LARG, azimute=92.0, dz=6.0,
-         cores={"azul": "#0078C8", "verde": "#2E8B3C"}),
+    dict(nome="rio_novo", arquivo="../logos/rio-novo.png", largura=LOGO_LARG, azimute=98.0, dz=12.0,
+         cores={"azul": "#0078C8", "verde": "#2E8B3C", "faixa_verde": "#2E8B3C", "faixa_amarela": "#F2C200"},
+         # faixas do mockup por baixo do logo: arcos de um circulo de centro `centro` (mm, em relacao ao
+         # centro do logo), raio interno e espessura, de x0 a x1, afinando nas pontas (`ponta` mm)
+         faixas=(("faixa_verde", 132.5, 3.5), ("faixa_amarela", 138.0, 3.5)),
+         faixas_geo=dict(centro=(0.0, 118.0), x0=-32.0, x1=30.0, ponta=12.0)),
     # FMT: escudo liso no lugar reservado. Quando chegar o logo oficial (logos/fmt.png), trocar
     # "escudo" por arquivo= e cores= como na Rio Novo.
     dict(nome="fmt", escudo=(30.0, 36.0), azimute=-92.0, dz=8.0, cores={"escudo": "#1F4E9C"}),
@@ -215,9 +219,22 @@ def limpa_mascaras(mascaras, px):
     return saida
 
 
-def mascaras_do_logo(caminho, largura_mm, minimo_mm=1.6):
-    """Mascaras (pixels) de cada cor do logo, imprimiveis: vaos menores que `minimo_mm` fechados e
-    pontas mais finas que 1 mm tiradas. Devolve (mascaras, px por mm, largura, altura em px)."""
+def mascara_faixa(forma, px_mm, centro, r_in, esp, x0, x1, ponta):
+    """Faixa em arco (por baixo do centro), afinando ate zero nas pontas, como um swoosh."""
+    import numpy as np
+
+    alt, larg = forma
+    yy, xx = np.mgrid[0:alt, 0:larg]
+    X = (xx - larg / 2) / px_mm
+    Y = (alt / 2 - yy) / px_mm
+    d = np.hypot(X - centro[0], Y - centro[1])
+    t = esp * np.clip(np.minimum((X - x0) / ponta, (x1 - X) / ponta), 0.0, 1.0)
+    return (d >= r_in) & (d <= r_in + t) & (Y < centro[1])
+
+
+def mascaras_do_logo(caminho, largura_mm, faixas=(), faixas_geo=None, minimo_mm=1.6):
+    """Mascaras (pixels) de cada cor do logo (e das faixas), imprimiveis: vaos menores que `minimo_mm`
+    fechados e pontas mais finas que 1 mm tiradas. Devolve (mascaras, px por mm, largura, altura em px)."""
     import cv2
     import numpy as np
 
@@ -233,12 +250,16 @@ def mascaras_do_logo(caminho, largura_mm, minimo_mm=1.6):
     mascaras = {"azul": colorido & (h >= 90) & (h <= 130), "verde": colorido & (h >= 35) & (h < 90)}
     alt, larg = img.shape[:2]
     px_mm = larg / largura_mm
+    # margem em volta (cabe as faixas e as dilatacoes nao batem na borda da imagem)
+    pad = int((30 if faixas else 4) * px_mm)
+    mascaras = {c: np.pad(m, pad) for c, m in mascaras.items()}
+    alt, larg = alt + 2 * pad, larg + 2 * pad
+    for nome, r_in, esp in faixas:
+        g = faixas_geo
+        mascaras[nome] = mascara_faixa((alt, larg), px_mm, g["centro"], r_in, esp, g["x0"], g["x1"], g["ponta"])
     mascaras = limpa_mascaras(mascaras, int(math.ceil(minimo_mm * px_mm)))
     mascaras = {c: _morf(m, "abre", 0.5, px_mm) for c, m in mascaras.items()}
-    # margem em volta para as dilatacoes nao baterem na borda da imagem
-    pad = int(4 * px_mm)
-    mascaras = {c: np.pad(m, pad) for c, m in mascaras.items()}
-    return mascaras, px_mm, larg + 2 * pad, alt + 2 * pad
+    return mascaras, px_mm, larg, alt
 
 
 def _morf(m, op, mm, px_mm):
@@ -281,23 +302,37 @@ def faces_da_mascara(m, escala, larg, alt):
 
 
 @memo
-def desenho_do_logo(arquivo, largura):
+def desenho_do_logo(arquivo, largura, faixas=(), faixas_geo=None):
     """Faces 2D (no plano XY, centradas) do logo: as formas de cada cor, a plaquinha de apoio de cada
     cor e o furo na bola. Tudo feito nas mascaras (pixels), sem lascas finas:
-      - plaquinha da 1a cor: o contorno dela + LOGO_APOIO; das outras: o retangulo delas + LOGO_APOIO
-        (junta as letras soltas); cada uma desvia das colunas das outras cores (0,6 mm) e das
+      - plaquinha: o contorno da cor + LOGO_APOIO; numa cor de varias partes soltas (as letras), o
+        retangulo delas + LOGO_APOIO (junta as letras); cada uma desvia das colunas das outras cores (0,6 mm) e das
         plaquinhas anteriores (0,3 mm), e perde o que ficar mais fino que 0,9 mm;
       - furo: as formas + LOGO_FOLGA, juntando o que fica a menos de 1,3 mm (sem tira fina de bola)."""
     import cv2
     import numpy as np
 
     caminho = os.path.normpath(os.path.join(AQUI, arquivo))
-    ms, px, larg, alt = mascaras_do_logo(caminho, largura)
+    ms, px, larg, alt = mascaras_do_logo(caminho, largura, faixas, faixas_geo)
     ms = {c: m for c, m in ms.items() if m.any()}
     esc = 1.0 / px
+    # furo na bola: as formas + folga, juntando o que fica a menos de 1,3 mm
+    uniao = np.zeros_like(next(iter(ms.values())))
+    for m in ms.values():
+        uniao |= m
+    furo = _morf(_morf(uniao, "dilata", LOGO_FOLGA, px), "fecha", 0.65, px)
+    # as pecas preenchem o furo todo (cada pixel vai para a cor mais proxima), menos a folga: sem vao
+    # aberto entre duas cores por onde se veria a lateral das colunas
+    nomes = list(ms)
+    dist = np.stack([cv2.distanceTransform(255 - ms[c], cv2.DIST_L2, 3) for c in nomes])
+    mais_perto = np.argmin(dist, axis=0)
+    r = max(1, int(round(LOGO_FOLGA * px)))
+    k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * r + 1, 2 * r + 1))
+    ms = {c: cv2.erode(((furo > 0) & (mais_perto == i)).astype(np.uint8) * 255, k) for i, c in enumerate(nomes)}
     apoios = {}
     for cor, m in ms.items():
-        if not apoios:
+        partes = cv2.connectedComponents(m)[0] - 1
+        if not apoios or partes == 1:   # uma peca so: plaquinha no proprio contorno
             a = _morf(m, "dilata", LOGO_APOIO, px)
         else:
             x, y, w, h = cv2.boundingRect(m)
@@ -310,10 +345,6 @@ def desenho_do_logo(arquivo, largura):
         for ap in apoios.values():
             a = a & ~_morf(ap, "dilata", 0.3, px)
         apoios[cor] = _morf(a, "abre", 0.45, px) | m
-    uniao = np.zeros_like(next(iter(ms.values())))
-    for m in ms.values():
-        uniao |= m
-    furo = _morf(_morf(uniao, "dilata", LOGO_FOLGA, px), "fecha", 0.65, px)
     return {
         "formas": {c: faces_da_mascara(m, esc, larg, alt) for c, m in ms.items()},
         "apoios": {c: faces_da_mascara(a, esc, larg, alt) for c, a in apoios.items()},
@@ -344,7 +375,7 @@ def camadas_do_logo(lg):
         e = escudo(*lg["escudo"])
         return {"formas": {"escudo": [e]}, "apoios": {"escudo": [bd.offset(e, LOGO_APOIO)]},
                 "furo": [bd.offset(e, LOGO_FOLGA)]}
-    return desenho_do_logo(lg["arquivo"], lg["largura"])
+    return desenho_do_logo(lg["arquivo"], lg["largura"], lg.get("faixas", ()), lg.get("faixas_geo"))
 
 
 def caixa_2d(faces, mais=0.0):
@@ -366,8 +397,10 @@ def geometria_logo(i):
     formas = camadas["formas"]
     todas = [f for fs in formas.values() for f in fs]
     bb = bd.Compound(todas).bounding_box()
-    hw, hh = bb.size.X / 2 + 4, bb.size.Y / 2 + 4
-    d_in = math.sqrt(R ** 2 - hw ** 2 - (hh + abs(lg["dz"])) ** 2) - 4.0
+    # canto mais longe do centro da bola (o desenho pode nao estar centrado: as faixas ficam embaixo)
+    x2 = max(bb.min.X ** 2, bb.max.X ** 2) + 8 * max(abs(bb.min.X), abs(bb.max.X)) + 16
+    y2 = max((bb.min.Y + lg["dz"] - 4) ** 2, (bb.max.Y + lg["dz"] + 4) ** 2)
+    d_in = math.sqrt(R ** 2 - x2 - y2) - 4.0
     esf = bd.Pos(0, -lg["dz"], 0) * bd.Sphere(R)       # a esfera da bola, no plano do logo
     pecas = {}
     for cor, fs in formas.items():
@@ -401,6 +434,16 @@ def logo_rio_novo_azul():
 @model
 def logo_rio_novo_verde():
     return logo_peca(0, "verde")
+
+
+@model
+def logo_rio_novo_faixa_verde():
+    return logo_peca(0, "faixa_verde")
+
+
+@model
+def logo_rio_novo_faixa_amarela():
+    return logo_peca(0, "faixa_amarela")
 
 
 @model
@@ -610,6 +653,8 @@ def base():
 PECAS = [("corpo_inferior", corpo_inferior), ("corpo_superior", corpo_superior), ("encosto", encosto),
          ("suporte", suporte), ("aro", aro), ("base", base),
          ("logo_rio_novo_azul", logo_rio_novo_azul), ("logo_rio_novo_verde", logo_rio_novo_verde),
+         ("logo_rio_novo_faixa_verde", logo_rio_novo_faixa_verde),
+         ("logo_rio_novo_faixa_amarela", logo_rio_novo_faixa_amarela),
          ("logo_fmt", logo_fmt)]
 
 
