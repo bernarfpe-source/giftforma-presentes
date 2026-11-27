@@ -3,8 +3,9 @@
 # ///
 """Cada peca da bola na posicao de imprimir (no prato, z = 0, centrada), sem suporte.
 
-  corpo_inferior   - de boca para baixo (a divisao no prato)
-  corpo_superior   - de cabeca para baixo (o topo no prato)
+  corpo_inferior   - de boca para baixo (a divisao no prato); 2 cores: branco + gomos pretos (AMS)
+  corpo_superior   - de cabeca para baixo (o topo no prato); 2 cores: branco + gomos pretos (AMS)
+                     sem AMS: imprimir so o branco e pintar os rebaixos dos gomos de preto
   encosto          - em pe, a ponta de baixo no prato (o perfil em U nao tem balanco)
   suporte, base    - como ficam na mesa
   aro              - de cabeca para baixo
@@ -37,14 +38,23 @@ def peca(shape, nome, cor):
     return shape
 
 
+def _metade_com_gomos(corpo, gomos, nome):
+    """Metade da bola + gomos pretos, as duas cores no mesmo lugar (multicor/AMS)."""
+    c = peca(corpo().shape, nome, bola.CORES[nome])
+    g = peca(gomos().shape, f"gomos_{nome.split('_')[1]}", bola.CORES[f"gomos_{nome.split('_')[1]}"])
+    junto = no_prato(bd.Compound(children=[c, g]), virar=True)
+    junto.label = nome
+    return junto
+
+
 @model
 def imprimir_corpo_inferior():
-    return peca(no_prato(bola.corpo_inferior().shape, virar=True), "corpo_inferior", bola.CORES["corpo_inferior"])
+    return _metade_com_gomos(bola.corpo_inferior, bola.gomos_inferior, "corpo_inferior")
 
 
 @model
 def imprimir_corpo_superior():
-    return peca(no_prato(bola.corpo_superior().shape, virar=True), "corpo_superior", bola.CORES["corpo_superior"])
+    return _metade_com_gomos(bola.corpo_superior, bola.gomos_superior, "corpo_superior")
 
 
 @model

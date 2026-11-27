@@ -54,3 +54,13 @@ CHECAGEM DE IMPRESSAO (FDM, PLA), peca por peca na posicao de imprimir: nenhum e
 
 PENDENCIAS: logo oficial da FMT (+ autorizacao); imagem referencia-5-pecas.png (nao veio no branch);
 prototipo impresso para acertar o aperto dos encaixes.
+
+GOMOS PRETOS (bola de futebol)
+- Pecas gomos_inferior e gomos_superior: pentagonos pretos de 1 mm, rentes a superficie.
+- corpo_inferior.3mf e corpo_superior.3mf ja vem com 2 cores (branco + gomos pretos): imprimir no AMS.
+- Sem AMS: imprimir so o branco e pintar os rebaixos dos gomos com caneta Posca / tinta acrilica preta.
+
+ANIMACAO DA MONTAGEM
+- video/montagem_bola_porta_celular.mp4 (18 s) e video/bola_pronta.png: para mandar ao cliente.
+- GLB/montagem_animada.glb: abrir no visualizador do text-to-cad (cad viewer GLB/montagem_animada.glb).
+- Refazer:  cad run src/animacao.py  e  cad model export <id> GLB/montagem_animada.glb

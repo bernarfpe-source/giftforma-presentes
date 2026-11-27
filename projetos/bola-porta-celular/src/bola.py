@@ -63,7 +63,7 @@ ORELHA_H, ORELHA_L, ABA_ESP = 12.0, 22.0, 5.0
 SUP_MARGEM = 6.0                   # a bandeja passa 6 mm do canal de cada lado
 ENC_Z0 = PISO_Z - 6.0              # o encosto desce 6 mm para dentro da bandeja
 EMBLEMA_R, EMBLEMA_ESP = 7.0, 2.0
-GOMO = 0.6
+GOMO = 1.0           # profundidade dos gomos (rebaixo e peca preta); 1 mm = parede minima de 2 fios de 0,4
 LOGO_FOLGA = 0.15                  # folga dos logos nos furos da bola
 LOGO_APOIO = 1.5                   # espessura da plaquinha de tras dos logos
 LOGO_AFINA = -0.08                 # mm por lado (negativo engrossa): a 60 mm o traco do desenho tem
@@ -84,7 +84,8 @@ LOGOS = [
 ]
 
 CORES = {"corpo_inferior": "#F4F4F2", "corpo_superior": "#F4F4F2", "encosto": "#2E8B3C",
-         "suporte": "#F4F4F2", "aro": "#F4F4F2", "base": "#2E8B3C"}
+         "suporte": "#F4F4F2", "aro": "#F4F4F2", "base": "#2E8B3C",
+         "gomos_inferior": "#1A1A1A", "gomos_superior": "#1A1A1A"}
 
 _a = math.radians(ANG_APOIO)
 C = bd.Vector(0, 0, ZC)
@@ -178,8 +179,9 @@ def direcoes_pentagonos():
     for s1 in (-1, 1):
         for s2 in (-1, 1):
             vs += [bd.Vector(0, s1, s2 * phi), bd.Vector(s1, s2 * phi, 0), bd.Vector(s2 * phi, 0, s1)]
-    rot = bd.Rot(18, 31, 7)
-    return [(rot * bd.Pos(*v)).position.normalized() for v in vs]
+    # giro do padrao escolhido para deixar o maximo de gomos a vista, longe dos logos, do canal e da emenda
+    m = ((0.065533, -0.776219, -0.627049), (0.948556, -0.146608, 0.280619), (-0.309752, -0.613181, 0.726679))
+    return [bd.Vector(*(r[0] * v.X + r[1] * v.Y + r[2] * v.Z for r in m)).normalized() for v in vs]
 
 
 def pentagonos(evitar):
@@ -548,6 +550,14 @@ def ressalto(folga=0.0):
     return a - canal(PAREDE + 1.0 - folga, PAREDE + NERVURA_P + 1.0 - folga)
 
 
+def _evitar_gomos():
+    """Onde nao vai gomo: em volta dos logos e na emenda das metades (o encaixe por dentro deixaria
+    a parede fina demais atras do gomo)."""
+    evitar = [no_lugar(i, geometria_logo(i)[3]) for i in range(len(LOGOS))]
+    evitar.append(cilindro(R + 2, Z_CORTE - RESSALTO_H - 1.5, Z_CORTE + 1.5))
+    return evitar
+
+
 @memo
 def corpo_inteiro():
     """A bola inteira, com canal, cavidade, logos, gomos e fenda (antes de dividir)."""
@@ -556,9 +566,7 @@ def corpo_inteiro():
     for i in range(len(LOGOS)):
         bola = bola + acima(no_lugar(i, geometria_logo(i)[2]) & esfera(R - 0.5), Z_CORTE) - canal(FOLGA)
     bola = bola + cilindro(PE_R, BASE_H - PE_H, BASE_H + 0.5) - oco_do_pe()
-    evitar = [no_lugar(i, geometria_logo(i)[3]) for i in range(len(LOGOS))]
-    evitar.append(cilindro(R + 2, Z_CORTE - 1.5, Z_CORTE + 1.5))
-    gomos = pentagonos(evitar)
+    gomos = pentagonos(_evitar_gomos())
     if gomos:
         bola = bola - bd.Compound(gomos)
     for i in range(len(LOGOS)):
@@ -580,6 +588,37 @@ def corpo_superior():
     c = _maior(acima(corpo_inteiro(), Z_CORTE) + ressalto())
     c.label = "corpo_superior"
     return c
+
+
+# ------------------------------------------------------------------ GOMOS PRETOS
+@memo
+def gomos_na_bola():
+    """Os pentagonos pretos que preenchem os rebaixos dos gomos, rentes a superficie da bola.
+    Impressao: junto com a metade da bola, em multicor (AMS), ou pintar o rebaixo e dispensar."""
+    gomos = pentagonos(_evitar_gomos())
+    fora = abaixo(acima(esfera(R), BASE_H), Z_TOPO) - canal(FOLGA) - fenda_nervura()
+    return bd.Compound(gomos) & fora
+
+
+def _gomos(metade, nome):
+    g = metade(gomos_na_bola(), Z_CORTE)
+    solidos = [x for x in g.solids() if x.volume > 1.0]
+    c = bd.Compound(solidos)
+    c.label = nome
+    c.color = CORES[nome]
+    return c
+
+
+@model
+def gomos_inferior():
+    """Gomos pretos da metade de baixo."""
+    return _gomos(abaixo, "gomos_inferior")
+
+
+@model
+def gomos_superior():
+    """Gomos pretos da metade de cima."""
+    return _gomos(acima, "gomos_superior")
 
 
 # ------------------------------------------------------------------ SUPORTE (bandeja)
@@ -672,7 +711,8 @@ def base():
     return b
 
 
-PECAS = [("corpo_inferior", corpo_inferior), ("corpo_superior", corpo_superior), ("encosto", encosto),
+PECAS = [("corpo_inferior", corpo_inferior), ("corpo_superior", corpo_superior),
+         ("gomos_inferior", gomos_inferior), ("gomos_superior", gomos_superior), ("encosto", encosto),
          ("suporte", suporte), ("aro", aro), ("base", base),
          ("logo_rio_novo_azul", logo_rio_novo_azul), ("logo_rio_novo_verde", logo_rio_novo_verde),
          ("logo_rio_novo_faixa_verde", logo_rio_novo_faixa_verde),
