@@ -1,0 +1,86 @@
+BOLA PORTA-CELULAR + PORTA-CANETAS  (brinde Rio Novo / FMT) -- modelado com text-to-cad
+Formato aproximado do mockup: referencias/mockup-original.jpg
+
+PECAS (cada uma de uma cor, impressas separadas e montadas por encaixe, folga 0,2 mm por lado)
+  1) corpo_inferior ........ metade de baixo da bola (o "pe" entra no rebaixo da base)
+     corpo_superior ........ metade de cima (o ressalto de baixo entra no canal da metade de baixo)
+  2) encosto ............... moldura verde em U do canal do celular; a nervura de tras desce pela fenda da bola
+  3) suporte ............... bandeja branca do celular (2 orelhas, vao no meio); entra no recorte da base
+  4) aro ................... anel fino da boca; trava o encosto por cima
+  5) base .................. disco verde de 120 mm
+  +  logo_rio_novo_azul .... o rio do logo Rio Novo (azul)
+     logo_rio_novo_verde ... as letras "io Novo" (verde)
+     logo_rio_novo_faixa_verde / logo_rio_novo_faixa_amarela ... as faixas em arco por baixo do logo
+     logo_fmt .............. escudo liso no lugar do logo da FMT (falta o arquivo oficial)
+     emblema_bola .......... disco da frente da bandeja
+  Bola de 128 mm (um pouco maior que a base, como no mockup); altura total 110 mm; base 120 mm.
+  Canal do celular: 92 mm de largura (celular grande com capinha, ate ~86 mm de largura).
+  Logo Rio Novo: 60 mm de largura; letras separadas entre si (>= 1,35 mm) e o "io" a 1,8 mm do rio.
+  Traco das letras ~1,2-1,3 mm: e o desenho original, ja perto do minimo de FDM com bico 0,4 mm.
+
+MONTAGEM
+  1. Logos: encaixar cada peca de logo POR DENTRO da metade de cima (a plaquinha fica do lado de dentro);
+     as colunas saem rentes a superficie da bola. Uma gota de cola por dentro, se ficar folgado.
+  2. Fechar a bola (metade de cima sobre a de baixo) e por na base.
+  3. Suporte no recorte da frente da base.
+  4. Encosto: descer pela fenda da bola ate entrar no canal do suporte.
+  5. Aro na boca (trava o encosto).
+
+IMPRESSAO (FDM, PLA, sem suporte) -- os 3MF ja estao na posicao certa
+  corpo_inferior: de boca para baixo.  corpo_superior e aro: de cabeca para baixo.
+  encosto: em pe.  suporte, base: como ficam na mesa.  logos: plaquinha no prato.
+  emblema_bola: imprimir em branco e trocar para preto na 1a camada acima de 2,0 mm.
+  O fundo do porta-canetas e em V (cone no meio, oco por baixo) para imprimir sem ponte.
+  Pentagonos: so rebaixados 0,6 mm na bola (pintar, ou imprimir multicor).
+
+ARQUIVOS
+- src/bola.py ............ o modelo (build123d / text-to-cad). Medidas ajustaveis no topo (model.param).
+- src/impressao.py ....... cada peca na posicao de imprimir.
+- src/exportar.py ........ gera 3MF/*.3mf (um por peca) e STEP/bola_5_pecas.step (montagem).
+- logos/rio-novo.png ..... logo oficial; o script separa azul e verde e vetoriza sozinho.
+- referencias/ ........... mockup original.
+
+RODAR (Windows PowerShell ou Linux)
+  irm https://www.texttocad.dev/install.ps1 | iex      (instala o cad, uma vez)
+  cad server start
+  cad run src/bola.py                                   (abre/atualiza o visualizador)
+  cad run src/exportar.py                               (regrava os 3MF e o STEP)
+
+CHECAGEM DE IMPRESSAO (FDM, PLA), peca por peca na posicao de imprimir: nenhum erro.
+  Avisos restantes: corpo_superior com pontes curtas nas bordas dos furos dos logos e das faixas
+  (vao de ~3,5 mm; a maior ponte tem 7 mm) e no furo do escudo FMT; suporte com o rebaixo do emblema (furo horizontal de 14 mm, 2 mm de fundo);
+  vaos pequenos entre letras nos logos. Regras gerais de FDM, nao de uma impressora especifica.
+  Montagem: nenhuma peca invade outra.
+
+PENDENCIAS: logo oficial da FMT (+ autorizacao); imagem referencia-5-pecas.png (nao veio no branch);
+prototipo impresso para acertar o aperto dos encaixes.
+
+GOMOS PRETOS (bola de futebol)
+- Pecas gomos_inferior e gomos_superior: pentagonos pretos de 1 mm, rentes a superficie.
+- corpo_inferior.3mf e corpo_superior.3mf ja vem com 2 cores (branco + gomos pretos): imprimir no AMS.
+- Sem AMS: imprimir so o branco e pintar os rebaixos dos gomos com caneta Posca / tinta acrilica preta.
+
+ANIMACAO DA MONTAGEM
+- video/montagem_bola_porta_celular.mp4 (18 s) e video/bola_pronta.png: para mandar ao cliente.
+- GLB/montagem_animada.glb: abrir no visualizador do text-to-cad (cad viewer GLB/montagem_animada.glb).
+- Refazer:  cad run src/animacao.py  e  cad model export <id> GLB/montagem_animada.glb
+
+ESCUDO DA FMF (Federacao Mato-grossense de Futebol)
+- Arquivo oficial em logos/fmf-escudo.svg (vetor). Escudo de 32 x 43,5 mm no lado direito da bola.
+- 4 pecas: logo_fmf_verde e logo_fmf_azul (as metades: atravessam a bola, com plaquinha por tras, como a
+  Rio Novo) + logo_fmf_branco (letras) e logo_fmf_amarelo (estrela): insertos de fundo reto que entram em
+  rebaixos na frente das metades. Uma gota de cola em cada inserto.
+- O "MT" pequeno do escudo ficou de fora: tracos de 0,4 mm nao imprimem.
+- Montagem: encaixar as metades por dentro da metade de cima da bola, junto com a Rio Novo; depois colar
+  as letras e a estrela pela frente.
+
+NOVA FRENTE (padrao da referencia, 27/11/2026)
+- Bola de 112 mm sobre base de 120 mm, 110 mm de altura (antes: bola de 128 mm).
+- Rebaixo na frente com borda branca de 5 mm, aberto em cima (o celular passa): 66 mm em cima, 56 mm na
+  cintura, 82 mm embaixo. Celular de 72 mm ou mais apoia na borda branca; menor apoia na placa verde.
+- encosto: placa verde de 3 mm com topo curvo e 2 pezinhos que entram nos 2 encaixes da base.
+- suporte: bandeja branca em U com pontas levantadas e frente curva; por tras ela se curva para dentro,
+  abracando a bola. apoios_celular: os 2 blocos verdes (encaixam em rebaixos do piso; vao do cabo no meio).
+- emblema_bola: bola classica (pentagono + 5 gomos) em relevo preto.
+- base: disco verde de 120 mm com os 2 encaixes do encosto.
+- Montagem: base > bola > encosto (pezinhos na base) > bandeja > blocos verdes > emblema > aro.
