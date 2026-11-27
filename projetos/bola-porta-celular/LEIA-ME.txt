@@ -64,3 +64,12 @@ ANIMACAO DA MONTAGEM
 - video/montagem_bola_porta_celular.mp4 (18 s) e video/bola_pronta.png: para mandar ao cliente.
 - GLB/montagem_animada.glb: abrir no visualizador do text-to-cad (cad viewer GLB/montagem_animada.glb).
 - Refazer:  cad run src/animacao.py  e  cad model export <id> GLB/montagem_animada.glb
+
+ESCUDO DA FMF (Federacao Mato-grossense de Futebol)
+- Arquivo oficial em logos/fmf-escudo.svg (vetor). Escudo de 32 x 43,5 mm no lado direito da bola.
+- 4 pecas: logo_fmf_verde e logo_fmf_azul (as metades: atravessam a bola, com plaquinha por tras, como a
+  Rio Novo) + logo_fmf_branco (letras) e logo_fmf_amarelo (estrela): insertos de fundo reto que entram em
+  rebaixos na frente das metades. Uma gota de cola em cada inserto.
+- O "MT" pequeno do escudo ficou de fora: tracos de 0,4 mm nao imprimem.
+- Montagem: encaixar as metades por dentro da metade de cima da bola, junto com a Rio Novo; depois colar
+  as letras e a estrela pela frente.

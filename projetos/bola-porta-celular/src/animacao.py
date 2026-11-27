@@ -58,8 +58,10 @@ def bola_montagem_animada():
         fora = _soma(sup, _lado(104.0, 95.0, 15.0))
         t = 0.8 + 0.35 * i
         entra(anim, nome, [(t, fora), (t + 1.2, sup), (3.6, sup), (5.0, meio), (6.4, ZERO)])
-    entra(anim, "logo_fmt", [(2.0, _soma(sup, _lado(-92.0, 95.0, 15.0))), (3.2, sup), (3.6, sup),
-                             (5.0, meio), (6.4, ZERO)])
+    for j, nome in enumerate(["logo_fmf_verde", "logo_fmf_azul", "logo_fmf_branco", "logo_fmf_amarelo"]):
+        t = 1.2 + 0.3 * j
+        entra(anim, nome, [(t, _soma(sup, _lado(-92.0, 95.0, 15.0))), (t + 1.2, sup), (3.6, sup),
+                           (5.0, meio), (6.4, ZERO)])
     # 2) a metade de cima fecha a bola e a bola desce na base
     for peca in ("corpo_superior", "gomos_superior"):
         entra(anim, peca, [(3.6, sup), (5.0, meio), (6.4, ZERO)])

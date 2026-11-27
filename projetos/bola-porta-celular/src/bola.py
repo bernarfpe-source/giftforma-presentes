@@ -14,7 +14,7 @@ Pecas, cada uma de uma cor, impressas separadas (impressora de um bico, FDM, PLA
   5) base      - disco de 120 mm; a bola assenta no rebaixo dela.
   + logos de encaixar, rentes a superficie da bola, colocados POR DENTRO da metade de cima antes
     de fechar a bola (uma plaquinha atras segura cada um): logo_rio_novo_azul (rio),
-    logo_rio_novo_verde (letras), logo_fmt (escudo, lugar reservado ate chegar o arquivo da FMT);
+    logo_rio_novo_verde (letras), logo_fmf_verde/azul/branco/amarelo (escudo da FMF: metades + insertos);
   + emblema_bola - disco da frente da bandeja (branco, pentagono preto: troca de filamento a 2,0 mm).
 
 Montagem: base -> metades da bola (com os logos) -> suporte no recorte da base -> encosto descendo
@@ -78,9 +78,12 @@ LOGOS = [
          # centro do logo), raio interno e espessura, de x0 a x1, afinando nas pontas (`ponta` mm)
          faixas=(("faixa_verde", 132.5, 3.5), ("faixa_amarela", 138.0, 3.5)),
          faixas_geo=dict(centro=(0.0, 115.0), x0=-34.0, x1=32.0, ponta=12.0)),
-    # FMT: escudo liso no lugar reservado. Quando chegar o logo oficial (logos/fmt.png), trocar
-    # "escudo" por arquivo= e cores= como na Rio Novo.
-    dict(nome="fmt", escudo=(30.0, 36.0), azimute=-92.0, dz=8.0, cores={"escudo": "#1F4E9C"}),
+    # FMF (Federacao Mato-grossense de Futebol): escudo oficial em vetor. As metades verde e azul atravessam
+    # a bola como os outros logos; as letras brancas e a estrela amarela sao insertos colados em rebaixos na
+    # frente das metades. O "MT" pequeno do escudo fica de fora (tracos de 0,4 mm nao imprimem).
+    dict(nome="fmf", svg="../logos/fmf-escudo.svg", largura=32.0, azimute=-92.0, dz=13.0,
+         cores={"verde": "#218218", "azul": "#24216D", "branco": "#F4F4F2", "amarelo": "#F8BC00"},
+         insertos=("branco", "amarelo")),
 ]
 
 CORES = {"corpo_inferior": "#F4F4F2", "corpo_superior": "#F4F4F2", "encosto": "#2E8B3C",
@@ -376,6 +379,97 @@ def desenho_do_logo(arquivo, largura, faixas=(), faixas_geo=None):
     }
 
 
+INSERTO = 1.6     # espessura minima dos insertos do escudo (letras e estrela), abaixo da superficie
+
+
+def _svg_poligonos(caminho):
+    """{id do grupo: [lista de poligonos de cada <path>]} de um SVG simples (M, H, V, L, Q, Z absolutos).
+    Cada poligono e uma lista de (x, y) nas unidades do SVG; uma curva Q vira 8 segmentos."""
+    import re
+    import xml.etree.ElementTree as ET
+
+    raiz = ET.parse(caminho).getroot()
+    ns = "{http://www.w3.org/2000/svg}"
+    vb = [float(v) for v in raiz.get("viewBox").split()]
+    grupos = {}
+    for g in raiz.iter(ns + "g"):
+        caminhos = []
+        for p in g.iter(ns + "path"):
+            toks = re.findall(r"[MHVLQZ]|-?\d+(?:\.\d+)?", p.get("d"))
+            polis, atual, x, y, i, cmd = [], [], 0.0, 0.0, 0, None
+            while i < len(toks):
+                t = toks[i]
+                if t in "MHVLQZ":
+                    cmd = t
+                    i += 1
+                    if cmd == "Z":
+                        if atual:
+                            polis.append(atual)
+                        atual = []
+                    continue
+                if cmd == "M":
+                    if atual:
+                        polis.append(atual)
+                    x, y = float(toks[i]), float(toks[i + 1]); i += 2
+                    atual = [(x, y)]
+                    cmd = "L"
+                elif cmd == "L":
+                    x, y = float(toks[i]), float(toks[i + 1]); i += 2
+                    atual.append((x, y))
+                elif cmd == "H":
+                    x = float(toks[i]); i += 1
+                    atual.append((x, y))
+                elif cmd == "V":
+                    y = float(toks[i]); i += 1
+                    atual.append((x, y))
+                elif cmd == "Q":
+                    cx, cy, x1, y1 = (float(v) for v in toks[i:i + 4]); i += 4
+                    for k in range(1, 9):
+                        t_ = k / 8
+                        atual.append(((1 - t_) ** 2 * x + 2 * (1 - t_) * t_ * cx + t_ ** 2 * x1,
+                                      (1 - t_) ** 2 * y + 2 * (1 - t_) * t_ * cy + t_ ** 2 * y1))
+                    x, y = x1, y1
+            if atual:
+                polis.append(atual)
+            caminhos.append(polis)
+        grupos[g.get("id")] = caminhos
+    return grupos, vb
+
+
+def _face(pontos):
+    pts = []
+    for p in pontos:
+        if not pts or (abs(p[0] - pts[-1][0]) > 1e-6 or abs(p[1] - pts[-1][1]) > 1e-6):
+            pts.append(p)
+    if abs(pts[0][0] - pts[-1][0]) < 1e-6 and abs(pts[0][1] - pts[-1][1]) < 1e-6:
+        pts.pop()
+    return bd.Face(bd.Wire.make_polygon([bd.Vector(px, py, 0) for px, py in pts], close=True))
+
+
+@memo
+def desenho_svg(arquivo, largura):
+    """Escudo em vetor: {"verde": face, "azul": face, "branco": [faces], "amarelo": [faces]}, em mm,
+    centrado. As metades ficam a 2 x LOGO_FOLGA uma da outra, na linha do meio do escudo."""
+    caminho = os.path.normpath(os.path.join(AQUI, arquivo))
+    grupos, vb = _svg_poligonos(caminho)
+    esc = largura / vb[2]
+    cx, cy = vb[0] + vb[2] / 2, vb[1] + vb[3] / 2
+
+    def mm(poli):
+        return [((px - cx) * esc, (cy - py) * esc) for px, py in poli]
+
+    verde = _face(mm(grupos["verde"][0][0]))
+    azul = _face(mm(grupos["azul"][0][0]))
+    meio = (249.0 - cx) * esc
+    grande = 4 * largura
+    esq = bd.Pos(meio - LOGO_FOLGA - grande / 2, 0) * bd.Rectangle(grande, grande)
+    dir_ = bd.Pos(meio + LOGO_FOLGA + grande / 2, 0) * bd.Rectangle(grande, grande)
+    branco = [_face(mm(p)) for p in grupos["branco"][0]]        # o 2o caminho ("MT") fica de fora
+    amarelo = [_face(mm(p)) for p in grupos["amarelo"][0]]
+    return {"verde": (verde & esq).faces()[0], "azul": (azul & dir_).faces()[0],
+            "branco": branco, "amarelo": amarelo, "inteiras": [verde, azul], "meio": meio}
+
+
 def escudo(w, h):
     pts = [(-w / 2, h / 2), (w / 2, h / 2), (w / 2, -h / 8), (0, -h / 2), (-w / 2, -h / 8)]
     f = bd.Face(bd.Wire.make_polygon([bd.Vector(x, y, 0) for x, y in pts], close=True))
@@ -395,6 +489,15 @@ def plano_lateral(azimute, dz):
 
 def camadas_do_logo(lg):
     """{"formas": {cor: faces}, "apoios": {cor: faces}, "furo": faces} no plano do logo."""
+    if "svg" in lg:
+        d = desenho_svg(lg["svg"], lg["largura"])
+        meio, grande = d["meio"], 4 * lg["largura"]
+        esq = bd.Pos(meio - 2 * LOGO_FOLGA - grande / 2, 0) * bd.Rectangle(grande, grande)
+        dir_ = bd.Pos(meio + 2 * LOGO_FOLGA + grande / 2, 0) * bd.Rectangle(grande, grande)
+        return {"formas": {"verde": [d["verde"]], "azul": [d["azul"]]},
+                "apoios": {"verde": (bd.offset(d["verde"], LOGO_APOIO) & esq).faces(),
+                           "azul": (bd.offset(d["azul"], LOGO_APOIO) & dir_).faces()},
+                "furo": [bd.offset(f, LOGO_FOLGA) for f in d["inteiras"]]}
     if "escudo" in lg:
         e = escudo(*lg["escudo"])
         return {"formas": {"escudo": [e]}, "apoios": {"escudo": [bd.offset(e, LOGO_APOIO)]},
@@ -431,6 +534,20 @@ def geometria_logo(i):
         apoio = _une([_ext(a, d_in - LOGO_APOIO, d_in) for a in camadas["apoios"][cor]])
         colunas = _une([_ext(f, d_in - LOGO_APOIO, R + 2) for f in fs]) & esf
         pecas[cor] = apoio + colunas
+    if lg.get("insertos"):
+        # letras e estrela: insertos de fundo reto num rebaixo na frente das metades (cola)
+        d = desenho_svg(lg["svg"], lg["largura"])
+        todas_ins = [f for c in lg["insertos"] for f in d[c]]
+        bi = bd.Compound(todas_ins).bounding_box()
+        mais_longe = max((bi.min.X ** 2 + max((bi.min.Y + lg["dz"]) ** 2, (bi.max.Y + lg["dz"]) ** 2)),
+                         (bi.max.X ** 2 + max((bi.min.Y + lg["dz"]) ** 2, (bi.max.Y + lg["dz"]) ** 2)))
+        z_fundo = math.sqrt(R ** 2 - mais_longe) - INSERTO
+        assert z_fundo > d_in + 1.0, (z_fundo, d_in)
+        rebaixo = _une([_ext(bd.offset(f, LOGO_FOLGA), z_fundo, R + 5) for f in todas_ins])
+        for cor in list(pecas):
+            pecas[cor] = pecas[cor] - rebaixo
+        for cor in lg["insertos"]:
+            pecas[cor] = _une([_ext(f, z_fundo, R + 2) for f in d[cor]]) & esf
     furos = _une([_ext(f, d_in - 0.5, R + 5) for f in camadas["furo"]])
     reforco = bd.extrude(bd.Pos(0, 0, d_in) * caixa_2d(todas, LOGO_APOIO + 2.5), R - d_in, taper=-44)
     evitar = _ext(caixa_2d(todas, 6.0), 0, R + 5)
@@ -471,8 +588,27 @@ def logo_rio_novo_faixa_amarela():
 
 
 @model
-def logo_fmt():
-    return logo_peca(1, "escudo")
+def logo_fmf_verde():
+    """Escudo FMF: metade verde."""
+    return logo_peca(1, "verde")
+
+
+@model
+def logo_fmf_azul():
+    """Escudo FMF: metade azul."""
+    return logo_peca(1, "azul")
+
+
+@model
+def logo_fmf_branco():
+    """Escudo FMF: letras brancas (insertos)."""
+    return logo_peca(1, "branco")
+
+
+@model
+def logo_fmf_amarelo():
+    """Escudo FMF: estrela (inserto)."""
+    return logo_peca(1, "amarelo")
 
 
 # ------------------------------------------------------------------ ENCOSTO (moldura em U)
@@ -717,7 +853,8 @@ PECAS = [("corpo_inferior", corpo_inferior), ("corpo_superior", corpo_superior),
          ("logo_rio_novo_azul", logo_rio_novo_azul), ("logo_rio_novo_verde", logo_rio_novo_verde),
          ("logo_rio_novo_faixa_verde", logo_rio_novo_faixa_verde),
          ("logo_rio_novo_faixa_amarela", logo_rio_novo_faixa_amarela),
-         ("logo_fmt", logo_fmt)]
+         ("logo_fmf_verde", logo_fmf_verde), ("logo_fmf_azul", logo_fmf_azul),
+         ("logo_fmf_branco", logo_fmf_branco), ("logo_fmf_amarelo", logo_fmf_amarelo)]
 
 
 # ------------------------------------------------------------------ MONTAGEM

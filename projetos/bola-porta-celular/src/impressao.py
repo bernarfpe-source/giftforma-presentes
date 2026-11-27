@@ -103,8 +103,23 @@ def imprimir_logo_rio_novo_faixa_amarela():
 
 
 @model
-def imprimir_logo_fmt():
-    return _logo(1, "escudo", "logo_fmt")
+def imprimir_logo_fmf_verde():
+    return _logo(1, "verde", "logo_fmf_verde")
+
+
+@model
+def imprimir_logo_fmf_azul():
+    return _logo(1, "azul", "logo_fmf_azul")
+
+
+@model
+def imprimir_logo_fmf_branco():
+    return _logo(1, "branco", "logo_fmf_branco")
+
+
+@model
+def imprimir_logo_fmf_amarelo():
+    return _logo(1, "amarelo", "logo_fmf_amarelo")
 
 
 @model
@@ -116,7 +131,8 @@ def imprimir_emblema_bola():
 TODAS = [imprimir_corpo_inferior, imprimir_corpo_superior, imprimir_encosto, imprimir_suporte,
          imprimir_aro, imprimir_base, imprimir_logo_rio_novo_azul, imprimir_logo_rio_novo_verde,
          imprimir_logo_rio_novo_faixa_verde, imprimir_logo_rio_novo_faixa_amarela,
-         imprimir_logo_fmt, imprimir_emblema_bola]
+         imprimir_logo_fmf_verde, imprimir_logo_fmf_azul, imprimir_logo_fmf_branco,
+         imprimir_logo_fmf_amarelo, imprimir_emblema_bola]
 
 if __name__ == "__main__":
     for m in TODAS:
