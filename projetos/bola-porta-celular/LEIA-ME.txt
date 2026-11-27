@@ -15,6 +15,8 @@ PECAS (cada uma de uma cor, impressas separadas e montadas por encaixe, folga 0,
      emblema_bola .......... disco da frente da bandeja
   Bola de 128 mm (um pouco maior que a base, como no mockup); altura total 110 mm; base 120 mm.
   Canal do celular: 92 mm de largura (celular grande com capinha, ate ~86 mm de largura).
+  Logo Rio Novo: 60 mm de largura; letras separadas entre si (>= 1,35 mm) e o "io" a 1,8 mm do rio.
+  Traco das letras ~1,2-1,3 mm: e o desenho original, ja perto do minimo de FDM com bico 0,4 mm.
 
 MONTAGEM
   1. Logos: encaixar cada peca de logo POR DENTRO da metade de cima (a plaquinha fica do lado de dentro);
